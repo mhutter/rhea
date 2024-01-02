@@ -58,8 +58,15 @@ in
   # persistence
   environment.etc."ssh/ssh_host_ed25519_key".source = "/nix/persist/etc/ssh/ssh_host_ed25519_key";
   environment.etc."ssh/ssh_host_ed25519_key.pub".source = "/nix/persist/etc/ssh/ssh_host_ed25519_key.pub";
-
   environment.etc."machine-id".source = "/nix/persist/etc/machine-id";
+
+  nix.settings = {
+    auto-optimise-store = true;
+    allowed-users = [ "root" ];
+  };
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
