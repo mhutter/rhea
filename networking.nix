@@ -26,5 +26,6 @@
     "2001:4860:4860::8844"
   ];
 
-  firewall.allowedTCPPorts = [ ] ++ config.services.openssh.ports;
+  firewall.allowedTCPPorts = [ ];
+  firewall.allowedUDPPorts = [ ];
 }
