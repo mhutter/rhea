@@ -25,7 +25,4 @@
     "2606:4700:4700::1111"
     "2001:4860:4860::8844"
   ];
-
-  firewall.allowedTCPPorts = [ ];
-  firewall.allowedUDPPorts = [ ];
 }

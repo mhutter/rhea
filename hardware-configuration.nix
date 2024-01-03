@@ -42,6 +42,11 @@
     fsType = "none";
     options = [ "bind" ];
   };
+  fileSystems."/var/lib/tailscale" = {
+    device = "/nix/persist/var/lib/tailscale";
+    fsType = "none";
+    options = [ "bind" ];
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

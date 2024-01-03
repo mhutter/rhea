@@ -50,9 +50,11 @@ in
     }];
   };
 
+  # Tailscale
   services.tailscale = {
     enable = true;
     openFirewall = true;
+    useRoutingFeatures = "server";
   };
 
   # persistence
