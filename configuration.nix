@@ -1,29 +1,34 @@
 { config, lib, pkgs, ... }:
 
-let
-  # Network settings
-  hostname = "rhea";
-  nic = "enp35s0";
-  ipv4 = {
-    address = "116.202.233.38";
-    gateway = "116.202.233.1";
-    prefixLength = 26;
-    netmask = "255.255.255.192";
-  };
-  ipv6 = {
-    address = "2a01:4f8:241:4c27::1";
-    prefixLength = 64;
-    gateway = "fe80::1";
-  };
-in
 {
   imports = [
-    ./hardware-configuration.nix
+    ./filesystems.nix
+    ./modules/boot.nix
+    ./modules/networking.nix
+    ./modules/persistence.nix
   ];
 
-  boot = import ./boot.nix { inherit config ipv4 nic; };
-  networking = import ./networking.nix {
-    inherit config ipv4 ipv6 hostname nic;
+  modules.networking = {
+    hostName = "rhea";
+    nic = "enp35s0";
+    ipv4 = {
+      address = "116.202.233.38";
+      prefixLength = 26;
+      netmask = "255.255.255.192";
+      gateway = "116.202.233.1";
+    };
+    ipv6 = {
+      address = "2a01:4f8:241:4c27::1";
+      prefixLength = 64;
+      gateway = "fe80::1";
+    };
+  };
+
+  modules.persistence = {
+    dirs = [
+      "/var/lib/tailscale"
+      "/var/log"
+    ];
   };
 
   time. timeZone = "UTC";
@@ -71,4 +76,8 @@ in
   '';
 
   system.stateVersion = "24.05"; # Did you read the comment?
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.enableRedistributableFirmware = lib.mkDefault true;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
