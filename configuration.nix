@@ -50,7 +50,7 @@
     settings.PermitRootLogin = "prohibit-password";
     # prevent RSA host key from happening
     hostKeys = [{
-      path = "/etc/ssh/ssh_host_ed25519_key";
+      path = "/nix/persist/etc/ssh/ssh_host_ed25519_key";
       type = "ed25519";
     }];
   };
@@ -63,8 +63,6 @@
   };
 
   # persistence
-  environment.etc."ssh/ssh_host_ed25519_key".source = "/nix/persist/etc/ssh/ssh_host_ed25519_key";
-  environment.etc."ssh/ssh_host_ed25519_key.pub".source = "/nix/persist/etc/ssh/ssh_host_ed25519_key.pub";
   environment.etc."machine-id".source = "/nix/persist/etc/machine-id";
 
   nix.settings = {
