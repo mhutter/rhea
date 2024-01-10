@@ -1,10 +1,11 @@
 # mhnet NixOS configurations
 
-Usage: `./deploy.sh HOST`
+Usage: `deploy`
 
 
 ## Backlog
 
+- [ ] Manage secret data with `agenix`
 - [ ] https://xeiaso.net/blog/paranoid-nixos-2021-07-18/
 - [ ] https://xeiaso.net/blog/paranoid-nixos-aws-2021-08-11/
 
