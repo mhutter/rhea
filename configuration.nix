@@ -8,6 +8,7 @@
     ./modules/persistence.nix
     ./services/caddy.nix
     ./services/rauthy.nix
+    ./services/vaultwarden.nix
   ];
 
   modules.networking = {

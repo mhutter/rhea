@@ -7,4 +7,5 @@ let
 in
 {
   "rauthy.age".publicKeys = [ mh rhea ];
+  "vaultwarden.age".publicKeys = [ mh rhea ];
 }
