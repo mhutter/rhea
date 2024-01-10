@@ -31,6 +31,8 @@
         hostname = "rhea";
         sshUser = "root";
         remoteBuild = true;
+        # See: https://github.com/serokell/deploy-rs/issues/226
+        sshOpts = [ "-oControlMaster=no" "-oControlPath=/dev/null" ];
 
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.rhea;
