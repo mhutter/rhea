@@ -8,15 +8,13 @@ let
 in
 {
   age.secrets.rauthy.file = ../secrets/rauthy.age;
-  modules.persistence.dirs = [ dataDir ];
 
-  # TODO: Caddy setup
   services.caddy.virtualHosts."${domain}".extraConfig = ''
     reverse_proxy 127.0.0.1:${port}
   '';
 
   virtualisation.oci-containers.containers.rauthy = {
-    image = "ghcr.io/sebadob/rauthy:0.20.0-lite";
+    image = "ghcr.io/sebadob/rauthy:0.20.1-lite";
     ports = [ "127.0.0.1:${port}:${port}/tcp" ];
     autoStart = true;
     volumes = [
