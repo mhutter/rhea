@@ -3,22 +3,29 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    systems.url = "github:nix-systems/x86_64-linux";
+    utils = {
+      url = "github:numtide/flake-utils";
+      inputs.systems.follows = "systems";
+    };
 
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
       # disable unused deps
       inputs.darwin.follows = "";
-      # inputs.home-manager.follows = "";
+      inputs.home-manager.follows = "";
     };
 
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.utils.follows = "utils";
     };
   };
 
-  outputs = { self, nixpkgs, agenix, deploy-rs }:
+  outputs = { self, nixpkgs, agenix, deploy-rs, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
