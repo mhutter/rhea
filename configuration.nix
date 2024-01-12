@@ -7,6 +7,7 @@
     ./modules/networking.nix
     ./modules/persistence.nix
     ./services/caddy.nix
+    ./services/podman.nix
     ./services/rauthy.nix
     ./services/vaultwarden.nix
   ];
