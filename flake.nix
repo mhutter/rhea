@@ -3,13 +3,21 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # disable darwin deps
+      inputs.darwin.follows = "";
+    };
+
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, deploy-rs }:
+  outputs = { self, nixpkgs, agenix, deploy-rs }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -17,13 +25,20 @@
     {
       # Ensure necessary tooling is available
       devShells."${system}".default = pkgs.mkShell {
-        packages = [ pkgs.deploy-rs ];
+        packages = [
+          agenix.packages."${system}".default
+          # TODO: load deploy-rs from their own flake
+          pkgs.deploy-rs
+        ];
       };
 
       # NixOS configurations
       nixosConfigurations.rhea = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux ";
-        modules = [ ./configuration.nix ];
+        modules = [
+          ./configuration.nix
+          agenix.nixosModules.default
+        ];
       };
 
       # Deployment specifications
@@ -32,7 +47,7 @@
         sshUser = "root";
         remoteBuild = true;
         # See: https://github.com/serokell/deploy-rs/issues/226
-        sshOpts = [ "-oControlMaster=no" "-oControlPath=/dev/null" ];
+        sshOpts = [ "-oControlMaster=no" ];
 
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.rhea;

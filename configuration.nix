@@ -6,6 +6,8 @@
     ./modules/boot.nix
     ./modules/networking.nix
     ./modules/persistence.nix
+    ./services/caddy.nix
+    ./services/rauthy.nix
   ];
 
   modules.networking = {
