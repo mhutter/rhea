@@ -2,14 +2,21 @@
 
 {
   imports = [
-    ./filesystems.nix
+    # Own modules
     ./modules/boot.nix
+    ./modules/filesystems.nix
     ./modules/networking.nix
     ./modules/persistence.nix
+
+    # Services
     ./services/caddy.nix
     ./services/podman.nix
-    ./services/rauthy.nix
-    ./services/vaultwarden.nix
+    ./services/sshd.nix
+    ./services/tailscale.nix
+
+    # Applications
+    ./applications/rauthy.nix
+    ./applications/vaultwarden.nix
   ];
 
   modules.networking = {
@@ -28,12 +35,6 @@
     };
   };
 
-  modules.persistence = {
-    dirs = [
-      "/var/lib/tailscale"
-      "/var/log"
-    ];
-  };
 
   time. timeZone = "UTC";
 
@@ -45,29 +46,11 @@
   environment.systemPackages = with pkgs; [
     htop
     tmux
-    vim
   ];
 
-  services.openssh = {
-    enable = true;
-    ports = [ 6272 ];
-    settings.PermitRootLogin = "prohibit-password";
-    # prevent RSA host key from happening
-    hostKeys = [{
-      path = "/nix/persist/etc/ssh/ssh_host_ed25519_key";
-      type = "ed25519";
-    }];
-  };
-
-  # Tailscale
-  services.tailscale = {
-    enable = true;
-    openFirewall = true;
-    useRoutingFeatures = "server";
-  };
-
-  # persistence
+  # Persistence
   environment.etc."machine-id".source = "/nix/persist/etc/machine-id";
+  modules.persistence.dirs = [ "/var/log" ];
 
   nix.settings = {
     auto-optimise-store = true;
