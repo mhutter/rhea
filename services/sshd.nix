@@ -3,6 +3,9 @@
     enable = true;
     ports = [ 6272 ];
 
+    # We connect via Tailscale, which is whitelisted
+    openFirewall = false;
+
     # We don't have any other users besides root
     settings.PermitRootLogin = "prohibit-password";
 
