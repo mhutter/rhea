@@ -7,8 +7,9 @@
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
-      # disable darwin deps
+      # disable unused deps
       inputs.darwin.follows = "";
+      # inputs.home-manager.follows = "";
     };
 
     deploy-rs = {
