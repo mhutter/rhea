@@ -8,4 +8,4 @@ fi
 
 host="$1"
 
-rbw get "luks $host" | command ssh "${host}-boot" cryptsetup-askpass
+openssl enc -aes256 -pbkdf2 -d -in "luks-${host}.key" | command ssh "${host}-boot" cryptsetup-askpass
