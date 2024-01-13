@@ -61,6 +61,7 @@ in
     networking = {
       inherit (cfg) hostName nameservers;
 
+      firewall.enable = true;
       useDHCP = false;
 
       interfaces."${cfg.nic}" = {

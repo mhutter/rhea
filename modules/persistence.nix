@@ -1,26 +1,50 @@
-{ config, lib, ... }:
+{ lib, config, ... }:
+
 let
   cfg = config.modules.persistence;
+
+  # Helper functions
+
+  # Define a string option with the given default value
+  mkStrOption = default: lib.mkOption { inherit default; type = lib.types.str; };
+
+  # Determine the source directory of the given dir
+  src = dir: toString (/nix/persist + dir);
+
 in
 {
   options.modules.persistence = with lib; {
     dirs = mkOption {
-      description = "Directoies that need persistence";
-      type = types.listOf types.str;
-      default = [ ];
+      type = types.attrsOf
+        (types.submodule
+          ({ name, ... }: {
+            options = {
+              dir = mkStrOption name;
+              user = mkStrOption "root";
+              group = mkStrOption "root";
+              mode = mkStrOption "0700";
+            };
+          }));
+      default = { };
     };
   };
 
   config = {
-    fileSystems = builtins.listToAttrs (map
-      (dir: {
-        name = dir;
-        value = {
-          device = "/nix/persist${dir}";
-          fsType = "none";
-          options = [ "bind" ];
-        };
+    # Ensure required directories exist and have proper owners & permissions
+    systemd.tmpfiles.settings."10-persistence" = lib.listToAttrs (map
+      ({ dir, user, group, mode, ... }: {
+        name = src dir;
+        value.d = { inherit user group mode; };
       })
-      cfg.dirs);
+      (lib.attrValues cfg.dirs));
+
+    # Mount directories to their targets
+    fileSystems = lib.mapAttrs
+      (name: { dir, ... }: {
+        device = src dir;
+        fsType = "none";
+        options = [ "bind" "noexec" ];
+      })
+      cfg.dirs;
   };
 }

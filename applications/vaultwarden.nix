@@ -5,8 +5,6 @@ let
   domain = "pw.mhnet.app";
   port = "42367";
 
-  # stateDir = config.systemd.services."vaultwarden".serviceConfig.StateDir;
-
 in
 {
   age.secrets.vaultwarden.file = ../secrets/vaultwarden.age;
@@ -18,7 +16,10 @@ in
     }
   '';
 
-  modules.persistence.dirs = [ "/var/lib/bitwarden_rs" ];
+  modules.persistence.dirs."/var/lib/bitwarden_rs" = {
+    user = "vaultwarden";
+    group = "vaultwarden";
+  };
 
   services.vaultwarden = {
     enable = true;

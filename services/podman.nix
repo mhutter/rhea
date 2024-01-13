@@ -1,14 +1,6 @@
 { ... }:
 {
-  # Cache images locally
-  modules.persistence.dirs = [
-    # SQLite DB containing layer locations
-    "/var/lib/containers/cache"
-    # Image metadata
-    "/var/lib/containers/storage/overlay-images"
-    # Image layers
-    "/var/lib/containers/storage/overlay-layers"
-  ];
+  modules.persistence.dirs."/var/lib/containers" = { };
 
   virtualisation.podman.autoPrune = {
     # Automatically remove unused images (and other stuff) once a week
