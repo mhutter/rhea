@@ -1,9 +1,9 @@
 { lib, config, ... }:
 
 let
-  dataDir = "/nix/persist/var/lib/rauthy";
   domain = "id.mhnet.app";
   port = "36013";
+  uid = "10001";
 
 in
 {
@@ -13,14 +13,22 @@ in
     reverse_proxy 127.0.0.1:${port}
   '';
 
+  modules.persistence.dirs."/var/lib/rauthy" = {
+    user = uid;
+    group = uid;
+  };
+
+  systemd.services."podman-rauthy".after = [ "var-lib-rauthy.mount" ];
+
   virtualisation.oci-containers.containers.rauthy = {
     image = "ghcr.io/sebadob/rauthy:0.20.1-lite";
     ports = [ "127.0.0.1:${port}:${port}/tcp" ];
     autoStart = true;
     volumes = [
-      "${dataDir}:/data:U"
+      "/var/lib/rauthy:/data:U"
       "${config.age.secrets.rauthy.path}:/app/rauthy.cfg:U,ro"
     ];
+    user = "${uid}:${uid}";
 
     # Reference: https://sebadob.github.io/rauthy/config/config.html
     environment = {

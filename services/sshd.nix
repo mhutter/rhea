@@ -15,4 +15,11 @@
       type = "ed25519";
     }];
   };
+
+  # Ensure host keys are properly secured
+  systemd.tmpfiles.settings."10-persistence"."/nix/persist/etc/ssh".d = {
+    user = "root";
+    group = "root";
+    mode = "0700";
+  };
 }
