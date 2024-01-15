@@ -29,13 +29,20 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      # Allow us to make use of nixpkgs' binary cache for deploy-rs
+      deployPkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          deploy-rs.overlay
+          (self: super: { deploy-rs = { inherit (pkgs) deploy-rs; lib = super.deploy-rs.lib; }; })
+        ];
+      };
     in
     {
       # Ensure necessary tooling is available
       devShells."${system}".default = pkgs.mkShell {
         packages = [
           agenix.packages."${system}".default
-          # TODO: load deploy-rs from their own flake
           pkgs.deploy-rs
         ];
       };
@@ -58,7 +65,7 @@
         sshOpts = [ "-oControlMaster=no" ];
 
         profiles.system = {
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.rhea;
+          path = deployPkgs.deploy-rs.lib.activate.nixos self.nixosConfigurations.rhea;
         };
       };
 
