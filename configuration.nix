@@ -11,6 +11,7 @@
     # Services
     ./services/caddy.nix
     ./services/podman.nix
+    ./services/postgresql.nix
     ./services/sshd.nix
     ./services/tailscale.nix
 

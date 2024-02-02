@@ -6,6 +6,8 @@ let
   rhea = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBhHDtoGETYvm8EleeFSTRTDnCQRLF9LL+tOaqDnNxzv";
 in
 {
+  "docspell-env.age".publicKeys = [ mh rhea ];
+  "postgresql-init.age".publicKeys = [ mh rhea ];
   "rauthy.age".publicKeys = [ mh rhea ];
   "vaultwarden.age".publicKeys = [ mh rhea ];
 }
