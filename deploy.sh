@@ -12,3 +12,9 @@ host="$1"
 # preventing GC from removing it
 nix build ".#nixosConfigurations.${host}.config.system.build.toplevel" --out-link ".result-${host}"
 deploy ".#${host}"
+
+echo -e "\n---> Latest installed kernels"
+command ssh "$host" -- find /boot/kernels -name '*-initrd' | cut -d- -f3- | sort -ru | head -n3
+
+echo -e "\n---> Currently running kernel"
+command ssh "$host" -- uname -r
