@@ -2,7 +2,7 @@
 
 let
   createRepackExtensions = lib.strings.concatMapStringsSep "\n"
-    (db: "psql -d ${db} -c 'CREATE EXTENSION pg_repack'")
+    (db: "psql -d ${db} -c 'CREATE EXTENSION IF NOT EXISTS pg_repack'")
     config.services.postgresql.ensureDatabases;
 
 in

@@ -23,9 +23,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "utils";
     };
+
+    docspell = {
+      url = "github:eikek/docspell?dir=nix/";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, agenix, deploy-rs, ... }:
+  outputs = { self, nixpkgs, agenix, deploy-rs, docspell, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -53,6 +58,7 @@
         modules = [
           ./configuration.nix
           agenix.nixosModules.default
+          docspell.nixosModules.default
         ];
       };
 

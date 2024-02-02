@@ -49,6 +49,28 @@
         "type": "github"
       }
     },
+    "docspell": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dir": "nix/",
+        "lastModified": 1706854589,
+        "narHash": "sha256-W2M3ftVzg8wEUqJ3UQ6KMXxxRcq/LV5Ai23nhEA14bg=",
+        "owner": "eikek",
+        "repo": "docspell",
+        "rev": "8ec92e0bb462679f164ab3e5e35c0cc104594f25",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nix/",
+        "owner": "eikek",
+        "repo": "docspell",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -85,6 +107,7 @@
       "inputs": {
         "agenix": "agenix",
         "deploy-rs": "deploy-rs",
+        "docspell": "docspell",
         "nixpkgs": "nixpkgs",
         "systems": "systems",
         "utils": "utils"

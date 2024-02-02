@@ -16,6 +16,7 @@
     ./services/tailscale.nix
 
     # Applications
+    ./applications/docspell.nix
     ./applications/rauthy.nix
     ./applications/vaultwarden.nix
   ];
