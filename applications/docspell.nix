@@ -5,9 +5,15 @@ let
   domain = "dms.mhnet.app";
   port = toString config.services.docspell-restserver.bind.port;
 
+  # Common configuration snippets
   jdbc = {
     url = "jdbc:postgresql://localhost:5432/docspell";
     user = "docspell";
+  };
+  full-text-search = {
+    enabled = true;
+    backend = "postgresql";
+    postgresql.use-default-connection = true;
   };
 
   envFile = config.age.secrets.docspell-env.path;
@@ -43,11 +49,7 @@ in
       signup.mode = "open";
     };
 
-    full-text-search = {
-      enabled = true;
-      backend = "postgresql";
-      postgresql.use-default-connection = true;
-    };
+    inherit full-text-search;
 
     # The whole OpenID configuration is set via env vars.
     # 
@@ -61,7 +63,7 @@ in
   services.docspell-joex = {
     enable = true;
 
-    inherit jdbc;
+    inherit jdbc full-text-search;
 
     scheduler.pool-size = 8;
   };
