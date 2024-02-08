@@ -1,5 +1,9 @@
 { config, ... }:
 
+let
+  hostKeyDir = "${config.modules.persistence.root}/initrd";
+
+in
 {
   boot = {
     kernelModules = [ "kvm-amd" ];
@@ -24,8 +28,7 @@
           port = 41083;
           # this is the default
           # authorizedKeys = config.users.users.root.openssh.authorizedKeys.keys;
-          # TODO: move to /nix/persist
-          hostKeys = [ "/nix/secret/initrd/ssh_host_ed25519_key" ];
+          hostKeys = [ "${hostKeyDir}/ssh_host_ed25519_key" ];
         };
       };
     };
@@ -43,5 +46,12 @@
     swraid.mdadmConf = ''
       HOMEHOST ${config.networking.hostName}
     '';
+  };
+
+  # Ensure host keys are properly secured
+  systemd.tmpfiles.settings."10-persistence"."${hostKeyDir}".d = {
+    user = "root";
+    group = "root";
+    mode = "0700";
   };
 }
