@@ -54,6 +54,7 @@
   # Persistence
   environment.etc."machine-id".source = "${config.modules.persistence.root}/etc/machine-id";
   modules.persistence.dirs."/var/log" = { mode = "0755"; };
+  modules.persistence.dirs."/var/lib/nixos" = { };
 
   nix.settings = {
     auto-optimise-store = true;
