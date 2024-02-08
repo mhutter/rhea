@@ -51,7 +51,7 @@
   ];
 
   # Persistence
-  environment.etc."machine-id".source = "/nix/persist/etc/machine-id";
+  environment.etc."machine-id".source = "${config.modules.persistence.root}/etc/machine-id";
   modules.persistence.dirs."/var/log" = { mode = "0755"; };
 
   nix.settings = {

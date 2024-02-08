@@ -9,11 +9,17 @@ let
   mkStrOption = default: lib.mkOption { inherit default; type = lib.types.str; };
 
   # Determine the source directory of the given dir
-  src = dir: toString (/nix/persist + dir);
+  src = dir: toString (cfg.root + dir);
 
 in
 {
   options.modules.persistence = with lib; {
+    root = mkOption {
+      description = "Directory where the data will be persisted";
+      type = types.str;
+      default = "/nix/persist";
+    };
+
     dirs = mkOption {
       type = types.attrsOf
         (types.submodule

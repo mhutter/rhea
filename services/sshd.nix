@@ -1,3 +1,9 @@
+{ config, ... }:
+
+let
+  etc = "${config.modules.persistence.root}/etc/ssh";
+
+in
 {
   services.openssh = {
     enable = true;
@@ -11,13 +17,13 @@
 
     # prevent RSA host key from happening
     hostKeys = [{
-      path = "/nix/persist/etc/ssh/ssh_host_ed25519_key";
+      path = "${etc}/ssh_host_ed25519_key";
       type = "ed25519";
     }];
   };
 
   # Ensure host keys are properly secured
-  systemd.tmpfiles.settings."10-persistence"."/nix/persist/etc/ssh".d = {
+  systemd.tmpfiles.settings."10-persistence"."${etc}".d = {
     user = "root";
     group = "root";
     mode = "0700";
