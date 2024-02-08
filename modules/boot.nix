@@ -45,6 +45,7 @@ in
     swraid.enable = true;
     swraid.mdadmConf = ''
       HOMEHOST ${config.networking.hostName}
+      MAILADDR mdmon@mhutter.net
     '';
   };
 
