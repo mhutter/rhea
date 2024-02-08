@@ -3,6 +3,7 @@
 {
   imports = [
     # Own modules
+    ./modules/backup.nix
     ./modules/boot.nix
     ./modules/filesystems.nix
     ./modules/networking.nix

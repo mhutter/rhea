@@ -9,5 +9,8 @@ in
   "docspell-env.age".publicKeys = [ mh rhea ];
   "postgresql-init.age".publicKeys = [ mh rhea ];
   "rauthy.age".publicKeys = [ mh rhea ];
+  "restic-env.age".publicKeys = [ mh rhea ];
+  "restic-password.age".publicKeys = [ mh rhea ];
+  "restic-repository.age".publicKeys = [ mh rhea ];
   "vaultwarden.age".publicKeys = [ mh rhea ];
 }

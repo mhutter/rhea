@@ -24,6 +24,7 @@
           port = 41083;
           # this is the default
           # authorizedKeys = config.users.users.root.openssh.authorizedKeys.keys;
+          # TODO: move to /nix/persist
           hostKeys = [ "/nix/secret/initrd/ssh_host_ed25519_key" ];
         };
       };
