@@ -29,6 +29,10 @@ in
               user = mkStrOption "root";
               group = mkStrOption "root";
               mode = mkStrOption "0700";
+              noexec = mkOption {
+                type = types.bool;
+                default = true;
+              };
             };
           }));
       default = { };
@@ -46,10 +50,10 @@ in
 
     # Mount directories to their targets
     fileSystems = lib.mapAttrs
-      (name: { dir, ... }: {
+      (name: { dir, noexec, ... }: {
         device = src dir;
         fsType = "none";
-        options = [ "bind" "noexec" ];
+        options = [ "bind" ] ++ (if noexec then [ "noexec" ] else [ ]);
       })
       cfg.dirs;
   };

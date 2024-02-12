@@ -21,7 +21,7 @@ in
   systemd.services."podman-rauthy".after = [ "var-lib-rauthy.mount" ];
 
   virtualisation.oci-containers.containers.rauthy = {
-    image = "ghcr.io/sebadob/rauthy:0.20.1-lite";
+    image = "ghcr.io/sebadob/rauthy:0.21.0-lite";
     ports = [ "127.0.0.1:${port}:${port}/tcp" ];
     autoStart = true;
     volumes = [
