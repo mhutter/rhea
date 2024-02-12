@@ -57,7 +57,7 @@ in
     # by Docspell. Now the config library has a way to force-overwrite certain
     # configurations, but when using this features with arrays (as `openid` is)
     # means you have to redefine the _whole_ item.
-    # openid = {};
+    # openid = [];
   };
 
   services.docspell-joex = {
