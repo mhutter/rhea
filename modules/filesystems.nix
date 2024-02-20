@@ -2,7 +2,7 @@
   fileSystems."/" = {
     device = "tmpfs";
     fsType = "tmpfs";
-    options = [ "defaults" "size=2G" "mode=0755" ];
+    options = [ "defaults" "size=8G" "mode=0755" ];
   };
 
   fileSystems."/boot" = {
