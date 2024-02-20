@@ -7,6 +7,7 @@ let
 in
 {
   "docspell-env.age".publicKeys = [ mh rhea ];
+  "grafana-env.age".publicKeys = [ mh rhea ];
   "miniflux-env.age".publicKeys = [ mh rhea ];
   "postgresql-init.age".publicKeys = [ mh rhea ];
   "rauthy.age".publicKeys = [ mh rhea ];

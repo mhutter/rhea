@@ -6,6 +6,7 @@
     ./modules/backup.nix
     ./modules/boot.nix
     ./modules/filesystems.nix
+    ./modules/monitoring.nix
     ./modules/networking.nix
     ./modules/persistence.nix
 
