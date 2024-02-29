@@ -147,6 +147,10 @@ scrape_configs:
     static_configs:
       - targets:
           - http://${cfgLokiAddr}/metrics
+  - job_name: caddy
+    static_configs:
+      - targets:
+          - http://127.0.0.1:2019/metrics
   - job_name: victoriametrics
     static_configs:
       - targets:
