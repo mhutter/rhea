@@ -66,6 +66,7 @@ in
         http_listen_port = 3100;
         grpc_listen_address = "127.0.0.1";
         grpc_listen_port = 9095;
+        log_level = "warn";
       };
       memberlist.join_members = [ "rhea:7946" ];
 
