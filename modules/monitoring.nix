@@ -122,6 +122,31 @@ in
     };
   };
 
+  services.prometheus.exporters.node = {
+    enable = true;
+    listenAddress = "127.0.0.1";
+    extraFlags = [
+      "--collector.filesystem.mount-points-exclude=^/(nix/store|var/log|var/lib/(bitwarden_rs|caddy|containers|grafana|loki|nixos|rauthy|tailscale)|run|dev)"
+    ];
+    enabledCollectors = [
+      "processes"
+      "systemd"
+    ];
+    disabledCollectors = [
+      "arp" # TODO: reenable once https://github.com/prometheus/node_exporter/pull/2909 is released
+      "bonding"
+      "conntrack"
+      "fibrechannel"
+      "infiniband"
+      "ipvs"
+      "nfs"
+      "nfsd"
+      "rapl"
+      "tapestats"
+      "zfs"
+    ];
+  };
+
   services.caddy.virtualHosts."victoriametrics.mhnet.app".extraConfig = ''
     reverse_proxy ${cfgVickyAddr}
     basicauth {
@@ -155,6 +180,10 @@ scrape_configs:
     static_configs:
       - targets:
           - http://${cfgVickyAddr}/metrics
+  - job_name: node_exporter
+    static_configs:
+      - targets:
+          - http://127.0.0.1:${toString config.services.prometheus.exporters.node.port}/metrics
 ''}"
     ];
   };
