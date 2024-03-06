@@ -28,9 +28,15 @@ in
     ensureUsers = [{ name = "docspell"; ensureDBOwnership = true; }];
   };
 
-  # This will be APPENDED to the existing ExecPostStart script
-  systemd.services.postgresql.postStart = ''
-    psql -f ${config.age.secrets.postgresql-init.path}
-    ${createRepackExtensions}
-  '';
+  # Systemd unit overrides
+  systemd.services.postgresql = {
+    # This will be APPENDED to the existing ExecPostStart script
+    postStart = ''
+      psql -f ${config.age.secrets.postgresql-init.path}
+      ${createRepackExtensions}
+    '';
+
+    # Try to prevent "Permission denied" when NixOS config changes are deployed
+    partOf = [ "systemd-tmpfiles-resetup.service" ];
+  };
 }
