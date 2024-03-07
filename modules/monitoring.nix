@@ -138,6 +138,7 @@ in
       "conntrack"
       "fibrechannel"
       "infiniband"
+      "interrupts"
       "ipvs"
       "nfs"
       "nfsd"
