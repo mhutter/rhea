@@ -21,4 +21,5 @@ builtins.listToAttrs (builtins.map toSecret [
   "restic-password.age"
   "restic-repository.age"
   "vaultwarden.age"
+  "wg-psk-tera.age"
 ])

@@ -16,6 +16,7 @@
     ./services/postgresql.nix
     ./services/sshd.nix
     ./services/tailscale.nix
+    ./services/wireguard.nix
 
     # Applications
     ./applications/docspell.nix
