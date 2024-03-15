@@ -20,6 +20,7 @@
 
     # Applications
     ./applications/docspell.nix
+    ./applications/keycloak.nix
     ./applications/miniflux.nix
     ./applications/rauthy.nix
     ./applications/vaultwarden.nix

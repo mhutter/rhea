@@ -14,6 +14,7 @@ in
 builtins.listToAttrs (builtins.map toSecret [
   "docspell-env.age"
   "grafana-env.age"
+  "keycloak-db-pw.age"
   "miniflux-env.age"
   "postgresql-init.age"
   "rauthy.age"
