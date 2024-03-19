@@ -4,7 +4,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     systems.url = "github:nix-systems/x86_64-linux";
-    utils = {
+
+    flake-utils = {
       url = "github:numtide/flake-utils";
       inputs.systems.follows = "systems";
     };
@@ -20,13 +21,16 @@
 
     deploy-rs = {
       url = "github:serokell/deploy-rs";
+      inputs.utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "utils";
     };
 
     docspell = {
-      url = "github:eikek/docspell?dir=nix/";
+      url = "github:eikek/docspell";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      # disable unused inputs
+      inputs.devshell-tools.follows = "";
     };
   };
 
@@ -56,9 +60,14 @@
       nixosConfigurations.rhea = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux ";
         modules = [
-          ./configuration.nix
           agenix.nixosModules.default
           docspell.nixosModules.default
+          ({ ... }: {
+            nixpkgs.overlays = [
+              docspell.overlays.default
+            ];
+          })
+          ./configuration.nix
         ];
       };
 
