@@ -5,6 +5,8 @@ let
     (db: "psql -d ${db} -c 'CREATE EXTENSION IF NOT EXISTS pg_repack'")
     config.services.postgresql.ensureDatabases;
 
+  dataDir = "/nix/persist/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}";
+
 in
 {
   # Some services can only connect via TCP (fuck you, JDBC) and hence need a
@@ -14,14 +16,16 @@ in
     owner = "postgres";
   };
 
-  modules.persistence.dirs."${config.services.postgresql.dataDir}" = { };
+  # This caused a race condition where postgresql would start up before the
+  # data dir was ready (or systemd would create its own state dir), so instead
+  # we just use the persisted folder and manage it ourselves (see below)
+  # modules.persistence.dirs."${config.services.postgresql.dataDir}" = { };
 
   services.postgresql = {
+    inherit dataDir;
     enable = true;
-
     extraPlugins = ps: with ps; [ pg_repack ];
     # TODO: ensure pg_repack runs regulary
-
     ensureDatabases = [
       "docspell"
     ];
@@ -35,8 +39,12 @@ in
       psql -f ${config.age.secrets.postgresql-init.path}
       ${createRepackExtensions}
     '';
+  };
 
-    # Try to prevent "Permission denied" when NixOS config changes are deployed
-    partOf = [ "systemd-tmpfiles-resetup.service" ];
+  # Create data dir
+  systemd.tmpfiles.settings."10-persistence"."${dataDir}".d = {
+    user = "postgres";
+    group = "postgres";
+    mode = "0700";
   };
 }
