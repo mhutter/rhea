@@ -77,16 +77,28 @@ in
         ring.kvstore.store = "inmemory";
       };
 
-      schema_config.configs = [{
-        from = "1970-01-01";
-        store = "tsdb";
-        object_store = "filesystem";
-        schema = "v12";
-        index = {
-          prefix = "index_";
-          period = "24h";
-        };
-      }];
+      schema_config.configs = [
+        {
+          from = "1970-01-01";
+          store = "tsdb";
+          object_store = "filesystem";
+          schema = "v12";
+          index = {
+            prefix = "index_";
+            period = "24h";
+          };
+        }
+        {
+          from = "2024-04-15";
+          store = "tsdb";
+          object_store = "filesystem";
+          schema = "v13";
+          index = {
+            prefix = "index_";
+            period = "24h";
+          };
+        }
+      ];
     };
   };
 
