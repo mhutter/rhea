@@ -60,11 +60,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1716586304,
-        "narHash": "sha256-5fdr2Pu7mxQEPiYpdG/mCwSdqf4CfKz8tMr1TSPKUy0=",
+        "lastModified": 1717395695,
+        "narHash": "sha256-4rP/ymT1xdFgVHJI6nUqEe5zcxN3764lN33we4mQqTc=",
         "owner": "eikek",
         "repo": "docspell",
-        "rev": "523022988a73859d1f573252c3f50f7d0db7a2c6",
+        "rev": "81aba411a4a90decc2ebd50825cb30d9000dd326",
         "type": "github"
       },
       "original": {
@@ -111,11 +111,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1716715802,
-        "narHash": "sha256-usk0vE7VlxPX8jOavrtpOqphdfqEQpf9lgedlY/r66c=",
+        "lastModified": 1717112898,
+        "narHash": "sha256-7R2ZvOnvd9h8fDd65p0JnB7wXfUvreox3xFdYWd1BnY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e2dd4e18cc1c7314e24154331bae07df76eb582f",
+        "rev": "6132b0f6e344ce2fe34fc051b72fb46e34f668e0",
         "type": "github"
       },
       "original": {
