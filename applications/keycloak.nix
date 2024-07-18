@@ -17,13 +17,13 @@ in
       passwordFile = config.age.secrets.keycloak-db-pw.path;
     };
     settings = {
-      hostname = domain;
-      hostname-strict-backchannel = true;
+      hostname = "https://${domain}";
 
       http-port = port;
       http-host = "::1";
 
       proxy = "edge";
+      proxy-headers = "forwarded";
     };
   };
 }
