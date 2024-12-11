@@ -1,0 +1,57 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: system
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  destinations:
+    - namespace: "*"
+      server: "https://kubernetes.default.svc"
+  sourceRepos:
+    - "https://github.com/mhutter/rhea.git"
+    - "https://helm.cilium.io/"
+    - "https://k8up-io.github.io/k8up"
+    - "https://kubernetes.github.io/ingress-nginx/"
+    - "https://prometheus-community.github.io/helm-charts"
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: apps
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  destinations:
+    - namespace: "!kube-system"
+      server: "https://kubernetes.default.svc"
+  sourceRepos:
+    - "https://github.com/mhutter/rhea.git"
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+spec:
+  project: system
+  destination:
+    namespace: argocd
+    server: "https://kubernetes.default.svc"
+  source:
+    repoURL: "https://github.com/mhutter/rhea.git"
+    targetRevision: coreos
+    path: clusters/rhea
+    directory:
+      recurse: true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
