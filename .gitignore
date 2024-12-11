@@ -2,3 +2,5 @@
 .result-*
 result
 restore/
+*.secret.yaml
+*.secret.yml

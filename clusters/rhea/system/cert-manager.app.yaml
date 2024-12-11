@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+spec:
+  project: system
+  destination:
+    namespace: cert-manager
+    server: "https://kubernetes.default.svc"
+  sources:
+    - repoURL: "https://github.com/mhutter/rhea.git"
+      targetRevision: coreos
+      path: apps/cert-manager
+    - repoURL: "https://github.com/mdonoughe/porkbun-webhook.git"
+      path: deploy/porkbun-webhook
+      targetRevision: "v0.1.5"
+      helm:
+        valuesObject:
+          groupName: mhnet.app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -12,6 +12,7 @@ spec:
     - namespace: "*"
       server: "https://kubernetes.default.svc"
   sourceRepos:
+    - "https://github.com/mdonoughe/porkbun-webhook.git"
     - "https://github.com/mhutter/rhea.git"
     - "https://helm.cilium.io/"
     - "https://k8up-io.github.io/k8up"
