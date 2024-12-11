@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>mhutter/.github:renovate-config", ":automergePatch"],
+  "enabledManagers": ["argocd", "kubernetes", "kustomize", "regex"],
+  "kustomize": {
+    "fileMatch": ["(^|/)kustomization\\.ya?ml$"],
+    "pinDigests": false
+  },
+  "argocd": {
+    "fileMatch": ["^clusters/.+\\.ya?ml$"]
+  },
+  "kubernetes": {
+    "fileMatch": ["^apps/.+\\.ya?ml$"]
+  },
+  "packageRules": [
+    {
+      "matchPackagePrefixes": ["docker.io/docspell/"],
+      "groupName": "docspell"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)kustomization\\.ya?ml$"],
+      "matchStrings": [
+        "https://github.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>[^/]+)/"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)kustomization\\.ya?ml$"],
+      "matchStrings": [
+        "https://raw.githubusercontent.com/(?<depName>[^/]+/[^/]+)/(?<currentValue>[^/]+)/"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)plan-k3s\\.yaml$"],
+      "matchStrings": ["  version: \"(?<currentValue>[^\"]+)\""],
+      "versioningTemplate": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?<compatibility>\\+k3s)(?<build>\\d+)$",
+      "depNameTemplate": "k3s-io/k3s-upgrade",
+      "datasourceTemplate": "github-tags"
+    }
+  ]
+}
