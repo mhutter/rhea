@@ -9,6 +9,8 @@
       devShell."${system}" = pkgs.mkShell {
         packages = with pkgs; [
           butane
+          cilium-cli
+          kubeseal
         ];
       };
     };
