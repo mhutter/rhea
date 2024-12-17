@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbun
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+spec:
+  rules:
+    - host: httpbun.mhnet.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: httpbun
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - httpbun.mhnet.app
+      secretName: httpbun-ingress-tls
