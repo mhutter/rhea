@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: psql
+
+labels:
+  - includeSelectors: true
+    pairs:
+      app.kubernetes.io/name: psql
+
+resources:
+  - namespace.yaml
+  - statefulset.yaml
+  - postgres-creds.sealed-secret.json
+
+configMapGenerator:
+  - name: scripts
+    files:
+      - createdb.sh

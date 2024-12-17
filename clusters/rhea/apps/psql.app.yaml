@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: psql
+spec:
+  project: apps
+  destination:
+    namespace: psql
+    server: "https://kubernetes.default.svc"
+  source:
+    repoURL: "https://github.com/mhutter/rhea.git"
+    targetRevision: coreos
+    path: apps/psql
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

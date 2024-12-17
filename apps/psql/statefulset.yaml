@@ -1,0 +1,66 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: psql
+spec:
+  type: ClusterIP
+  ports:
+    - name: psql
+      protocol: TCP
+      port: 5432
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: psql
+spec:
+  serviceName: "psql"
+  replicas: 1
+  revisionHistoryLimit: 3
+  template:
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: postgres
+          image: "docker.io/library/postgres:17.2-alpine"
+          ports:
+            - containerPort: 5432
+              name: psql
+          env:
+            - name: PGDATA
+              value: /data/pgdata
+          envFrom:
+            - secretRef:
+                name: postgres-creds
+          volumeMounts:
+            - name: pgdata
+              mountPath: /data
+            - name: scripts
+              mountPath: /scripts
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+      volumes:
+        - name: scripts
+          configMap:
+            name: scripts
+            defaultMode: 0555
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 181917
+        runAsGroup: 181917
+        seccompProfile:
+          type: RuntimeDefault
+  volumeClaimTemplates:
+    - metadata:
+        name: pgdata
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
