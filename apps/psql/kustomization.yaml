@@ -14,6 +14,9 @@ resources:
   - postgres-creds.sealed-secret.json
 
 configMapGenerator:
+  - name: config
+    files:
+      - postgresql.conf
   - name: scripts
     files:
       - createdb.sh

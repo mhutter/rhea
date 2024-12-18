@@ -5,6 +5,7 @@ metadata:
   name: psql
 spec:
   type: ClusterIP
+  clusterIP: None
   ports:
     - name: psql
       protocol: TCP
@@ -25,6 +26,12 @@ spec:
       containers:
         - name: postgres
           image: "docker.io/library/postgres:17.2-alpine"
+          args:
+            - postgres
+            - -c
+            - config_file=/etc/postgresql/postgresql.conf
+            - -c
+            - listen_addresses=*
           ports:
             - containerPort: 5432
               name: psql
@@ -37,6 +44,9 @@ spec:
           volumeMounts:
             - name: pgdata
               mountPath: /data
+            - name: config
+              mountPath: /etc/postgresql
+              readOnly: true
             - name: scripts
               mountPath: /scripts
               readOnly: true
@@ -45,6 +55,9 @@ spec:
             capabilities:
               drop: ["ALL"]
       volumes:
+        - name: config
+          configMap:
+            name: config
         - name: scripts
           configMap:
             name: scripts
