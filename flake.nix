@@ -10,7 +10,9 @@
         packages = with pkgs; [
           butane
           cilium-cli
+          kubeconform
           kubeseal
+          kustomize
         ];
       };
     };

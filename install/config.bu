@@ -1,0 +1,166 @@
+variant: fcos
+version: 1.5.0
+
+passwd:
+  users:
+    - name: mh
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPhRxDZsJ7zFb7Zz7vrRMmIvptWCfA2HgnxYnlmhu24
+      groups:
+        # https://docs.fedoraproject.org/en-US/fedora-coreos/authentication/#_configuring_administrative_privileges
+        - sudo
+        - wheel
+
+# Configure RAID1 on both NVMe disks
+boot_device:
+  mirror:
+    devices:
+      - /dev/nvme0n1
+      - /dev/nvme1n1
+storage:
+  disks:
+    - device: /dev/nvme0n1
+    - device: /dev/nvme1n1
+
+  files:
+    # Set the hostname
+    - path: /etc/hostname
+      mode: 0644
+      contents:
+        inline: rhea.mhnet.dev
+
+    # Configure auto-updates
+    - path: /etc/zincati/config.d/55-update-strategy.toml
+      contents:
+        inline: |
+          [updates]
+          strategy = "periodic"
+
+          [[updates.periodic.window]]
+          start_time = "03:00"
+          length_minutes = 120
+
+    # Registry config
+    - path: /etc/rancher/k3s/registries.yaml
+      mode: 0644
+      contents:
+        inline: |
+          mirrors:
+            "docker.io":
+              endpoint:
+                - "dockerhub.vshn.net"
+            "registry.k8s.io":
+              endpoint:
+                - "registry-k8s-io.apps.cloudscale-lpg-2.appuio.cloud"
+
+    ### Repositories
+    # K3s-common RPM repo
+    - path: /etc/yum.repos.d/rancher-k3s-common.repo
+      mode: 0644
+      contents:
+        inline: |
+          [rancher-k3s-common-stable]
+          name=Rancher K3s Common (stable)
+          baseurl=https://rpm.rancher.io/k3s/stable/common/coreos/noarch
+          enabled=1
+          gpgcheck=1
+          repo_gpgcheck=0
+          gpgkey=https://rpm.rancher.io/public.key
+    # Tailscale repo
+    - path: /etc/yum.repos.d/tailscale.repo
+      mode: 0644
+      contents:
+        source: "https://pkgs.tailscale.com/stable/fedora/tailscale.repo"
+
+    # K3s configuration
+    - path: /etc/rancher/k3s/config.yaml
+      mode: 0600
+      contents:
+        inline: |
+          # Server configuration
+          kubelet-arg: "config=/etc/rancher/k3s/kubelet.config"
+          tls-san: rhea
+
+          # Cluster configuration
+          secrets-encryption: true
+          cluster-cidr: "10.42.0.0/16"
+          service-cidr: "10.43.0.0/16"
+
+          # Use Cilium
+          flannel-backend: none
+          disable-kube-proxy: true
+          disable-network-policy: true
+
+          # Disable unneeded features
+          disable-helm-controller: true
+          disable: [servicelb, traefik]
+
+    # Kubelet config
+    - path: /etc/rancher/k3s/kubelet.config
+      mode: 0644
+      contents:
+        inline: |
+          apiVersion: kubelet.config.k8s.io/v1beta1
+          kind: KubeletConfiguration
+          shutdownGracePeriod: 60s
+          shutdownGracePeriodCriticalPods: 10s
+
+    # Install K3s
+    - path: /usr/local/bin/k3s
+      mode: 0755
+      contents:
+        source: 'https://github.com/k3s-io/k3s/releases/download/v1.31.3%2Bk3s1/k3s'
+        verification:
+          hash: sha256-0d4aee46981d6aa78ed9285f8d97be175d6bf07ed3cac952e7f861b4a3ecddf7
+
+systemd:
+  units:
+    # Install K3s and other deps
+    - name: rpm-ostree-install-k3s-deps.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Install k3s dependencies
+        Wants=network-online.target
+        After=network-online.target
+        Before=zincati.service
+        Before=k3s.service
+        ConditionPathExists=|!/usr/share/selinux/packages/k3s.pp
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=rpm-ostree install --apply-live --allow-inactive --assumeyes k3s-selinux tailscale
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: k3s.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Run K3s
+        Documentation=https://k3s.io
+        Wants=network-online.target
+        After=network-online.target
+
+        [Service]
+        Type=notify
+        EnvironmentFile=-/etc/default/%N
+        EnvironmentFile=-/etc/sysconfig/%N
+        EnvironmentFile=-/etc/systemd/system/%N.env
+        KillMode=process
+        Delegate=yes
+        LimitNOFILE=1048576
+        LimitNPROC=infinity
+        LimitCORE=infinity
+        TasksMax=infinity
+        TimeoutStartSec=0
+        Restart=always
+        RestartSec=5s
+        ExecStartPre=-/sbin/modprobe br_netfilter
+        ExecStartPre=-/sbin/modprobe overlay
+        ExecStart=/usr/local/bin/k3s server
+
+        [Install]
+        WantedBy=multi-user.target

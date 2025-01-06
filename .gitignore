@@ -1,6 +1,9 @@
+*.ign
 *.key
-.result-*
-result
-restore/
 *.secret.yaml
 *.secret.yml
+.result-*
+/target
+k3s.yaml
+restore/
+result
