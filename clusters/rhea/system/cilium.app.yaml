@@ -16,7 +16,7 @@ spec:
         operator:
           replicas: 1
         kubeProxyReplacement: true
-        k8sServiceHost: "100.67.245.28"
+        k8sServiceHost: "100.102.81.94"
         k8sServicePort: 6443
         ipam:
           operator:
