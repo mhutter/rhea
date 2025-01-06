@@ -16,6 +16,7 @@ spec:
         controller:
           config:
             allow-snippet-annotations: "true"
+            annotations-risk-level: "Critical"
           kind: DaemonSet
           hostPort:
             enabled: true
