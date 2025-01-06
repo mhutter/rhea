@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultwarden
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vaultwarden
+spec:
+  serviceName: vaultwarden
+  replicas: 1
+  revisionHistoryLimit: 3
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: vaultwarden
+          image: "docker.io/vaultwarden/server:1.32.5-alpine"
+          env:
+            - name: DOMAIN
+              value: "https://pw.mhnet.app"
+            - name: ROCKET_PORT
+              value: "8080"
+            - name: SMTP_FROM_NAME
+              value: mhnet Vaultwarden
+          envFrom:
+            - secretRef:
+                name: vaultwarden-env
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 125530
+        runAsGroup: 125530
+        fsGroup: 125530
+        seccompProfile:
+          type: RuntimeDefault
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
