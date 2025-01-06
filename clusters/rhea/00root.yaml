@@ -48,7 +48,7 @@ spec:
     server: "https://kubernetes.default.svc"
   source:
     repoURL: "https://github.com/mhutter/rhea.git"
-    targetRevision: coreos
+    targetRevision: HEAD
     path: clusters/rhea
     directory:
       recurse: true

@@ -9,7 +9,7 @@ spec:
     server: "https://kubernetes.default.svc"
   sources:
     - repoURL: "https://github.com/mhutter/rhea.git"
-      targetRevision: coreos
+      targetRevision: HEAD
       path: apps/cert-manager
     - repoURL: "https://github.com/mdonoughe/porkbun-webhook.git"
       path: deploy/porkbun-webhook
