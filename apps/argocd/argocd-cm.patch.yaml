@@ -12,3 +12,11 @@ data:
         - CiliumIdentity
       clusters:
         - "*"
+  # Configure OIDC
+  url: "https://argocd.mhnet.dev"
+  oidc.config: |
+    name: mhnet IDP
+    issuer: https://id.mhnet.app/realms/mhnet
+    clientID: argocd
+    clientSecret: $oidc.keycloak.clientSecret
+    requestedScopes: ["openid", "profile", "email", "groups"]

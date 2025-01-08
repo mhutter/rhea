@@ -1,6 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# OIDC configuration: https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/keycloak/
+
 resources:
   - namespace.yaml
   - "https://raw.githubusercontent.com/argoproj/argo-cd/v2.13.3/manifests/install.yaml"
@@ -8,3 +10,4 @@ resources:
 
 patches:
   - path: ./argocd-cm.patch.yaml
+  - path: ./argocd-rbac-cm.patch.yaml
