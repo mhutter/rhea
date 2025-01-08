@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: system-upgrade-controller
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: system
+  destination:
+    namespace: system-upgrade
+    server: "https://kubernetes.default.svc"
+  source:
+    repoURL: "https://github.com/mhutter/rhea.git"
+    targetRevision: HEAD
+    path: apps/system-upgrade-controller
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
