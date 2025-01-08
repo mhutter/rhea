@@ -12,11 +12,11 @@ fi
 NAME="$(echo $1 | tr '[:upper:]' '[:lower:]')"
 PASSWORD="$(cat /dev/urandom | tr -dc '[:alnum:]' | head -c 32)"
 
-psql -v ON_ERROR_STOP=1 --username "${POSTGRES_USER:-postgres}" >&2 <<-EOSQL
-	CREATE USER ${NAME} WITH PASSWORD '${PASSWORD}';
-	CREATE DATABASE ${NAME};
-	GRANT ALL PRIVILEGES ON DATABASE ${NAME} TO ${NAME};
-EOSQL
+# Create the user
+psql -U "${POSTGRES_USER:-postgres}" --command "CREATE USER ${NAME} WITH PASSWORD '${PASSWORD}';" >&2
+
+# Create the database, setting the new user as the owner
+createdb -U "${POSTGRES_USER:-postgres}" -O "$NAME" "$NAME"
 
 cat <<SECRET
 apiVersion: v1
