@@ -16,7 +16,7 @@ data:
   url: "https://argocd.mhnet.dev"
   oidc.config: |
     name: mhnet IDP
-    issuer: https://id.mhnet.app/realms/mhnet
+    issuer: https://id.mhnet.app/realms/mhnet-infra
     clientID: argocd
     clientSecret: $oidc.keycloak.clientSecret
     requestedScopes: ["openid", "profile", "email", "groups"]
