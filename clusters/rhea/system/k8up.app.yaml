@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8up
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: system
+  destination:
+    namespace: k8up
+    server: "https://kubernetes.default.svc"
+  sources:
+    - repoURL: "https://github.com/mhutter/gitops-mhnet.git"
+      targetRevision: HEAD
+      path: apps/k8up
+    - repoURL: "https://k8up-io.github.io/k8up"
+      chart: k8up
+      targetRevision: "4.8.1"
+      helm:
+        valuesObject:
+          metrics:
+            serviceMonitor:
+              enabled: true
+            prometheusRule:
+              enabled: true
+            grafanaDashboard:
+              enabled: true
+              namespace: monitoring
+          tolerations:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+          k8up:
+            envVars:
+              - name: BACKUP_GLOBAL_SUCCESSFUL_JOBS_HISTORY_LIMIT
+                value: "1"
+              - name: BACKUP_GLOBALS3ENDPOINT
+                valueFrom:
+                  secretKeyRef:
+                    name: global-s3-credentials
+                    key: endpoint
+              - name: BACKUP_GLOBALS3BUCKET
+                valueFrom:
+                  secretKeyRef:
+                    name: global-s3-credentials
+                    key: bucket
+              - name: BACKUP_GLOBALACCESSKEYID
+                valueFrom:
+                  secretKeyRef:
+                    name: global-s3-credentials
+                    key: access-key
+              - name: BACKUP_GLOBALSECRETACCESSKEY
+                valueFrom:
+                  secretKeyRef:
+                    name: global-s3-credentials
+                    key: secret-key
+              - name: BACKUP_GLOBALREPOPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: global-s3-credentials
+                    key: password
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: true
