@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>mhutter/.github:renovate-config", ":automergePatch"],
-  "enabledManagers": ["argocd", "kubernetes", "kustomize", "regex"],
+  "enabledManagers": ["argocd", "kubernetes", "kustomize", "custom.regex"],
   "kustomize": {
     "fileMatch": ["(^|/)kustomization\\.ya?ml$"],
     "pinDigests": false
@@ -14,8 +14,8 @@
   },
   "packageRules": [
     {
-      "matchPackagePrefixes": ["docker.io/docspell/"],
-      "groupName": "docspell"
+      "groupName": "docspell",
+      "matchPackageNames": ["docker.io/docspell/{/,}**"]
     }
   ],
   "customManagers": [
