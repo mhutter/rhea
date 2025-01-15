@@ -13,7 +13,6 @@ spec:
     repoURL: "https://github.com/mhutter/rhea.git"
     targetRevision: HEAD
     path: apps/rr
-    helm: {}
 
   syncPolicy:
     automated:
