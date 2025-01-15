@@ -7,6 +7,11 @@ ls -d apps/* | \
 while read -r dir; do
   echo "---> ${dir}";
 
+  test -f "${dir}"/kustomization.y?ml || {
+    echo "     Kustomization not found, skipping"
+    continue
+  }
+
   kustomize build "$dir" | \
   kubeconform \
     -schema-location default \
