@@ -1,0 +1,75 @@
+{{- define "rr.service" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name | quote }}
+  labels:
+    app: {{ .name | quote }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: {{ .name | quote }}
+  ports:
+    - name: web
+      port: {{ .port }}
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .name | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .name | quote }}
+  serviceName: {{ .name | quote }}
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: {{ .name | quote }}
+    spec:
+      containers:
+        - name: {{ .name | quote }}
+          image: {{ .image | quote }}
+          env:
+            - name: PUID
+              value: "2000"
+            - name: PGID
+              value: "2000"
+            - name: UMASK
+              value: "002"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: data
+              mountPath: /data
+            - name: run
+              mountPath: /run
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data
+        - name: run
+          emptyDir: {}
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: config
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+{{- end }}

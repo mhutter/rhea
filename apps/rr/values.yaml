@@ -1,0 +1,21 @@
+---
+services:
+  radarr:
+    image: "ghcr.io/hotio/radarr:release-5.17.2.9580"
+    domain: radarr.mhnet.app
+    port: 7878
+
+  sonarr:
+    image: "ghcr.io/hotio/sonarr:release-4.0.12.2823"
+    domain: sonarr.mhnet.app
+    port: 8989
+
+  sabnzbd:
+    image: "ghcr.io/hotio/sabnzbd:release-4.4.1"
+    domain: sabnzbd.mhnet.app
+    port: 8080
+
+  emby:
+    image: "docker.io/emby/embyserver:4.8.10.0"
+    domain: emby.mhnet.app
+    port: 8096

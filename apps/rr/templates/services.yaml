@@ -1,0 +1,5 @@
+{{- range $k, $v := .Values.services }}
+{{- $patch := dict "name" $k }}
+{{- $values := mustMerge $v $patch }}
+{{- template "rr.service" $values }}
+{{- end }}
