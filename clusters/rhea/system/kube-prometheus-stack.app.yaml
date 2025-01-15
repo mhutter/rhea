@@ -110,6 +110,12 @@ spec:
             # kube-proxy is disabled (replaced by cilium)
             enabled: false
 
+          prometheus-node-exporter:
+            extraArgs:
+              - "--collector.filesystem.mount-points-exclude=^/(etc|run|var|sysroot/ostree/deploy|dev|proc|sys)($|/)"
+              - "--collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$"
+              - "--collector.netdev.device-exclude=^(lxc.+|cilium_.+)$"
+
           prometheus:
             prometheusSpec:
               replicas: 1
