@@ -1,0 +1,158 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: system
+  destination:
+    namespace: monitoring
+    server: "https://kubernetes.default.svc"
+  sources:
+    - repoURL: "https://github.com/mhutter/rhea.git"
+      targetRevision: HEAD
+      path: apps/kube-prometheus-stack
+    - repoURL: "https://prometheus-community.github.io/helm-charts"
+      chart: kube-prometheus-stack
+      targetRevision: "67.9.0"
+      helm:
+        # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+        # https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+        valuesObject:
+          alertmanager:
+            config:
+              route:
+                receiver: telegram
+              receivers:
+                - name: "null"
+                - name: telegram
+                  telegram_configs:
+                    - chat_id: 27184418
+                      bot_token_file: /var/run/telegram-configs/botToken
+            alertmanagerSpec:
+              volumes:
+                - name: telegram-configs
+                  secret:
+                    secretName: telegram-configs
+              volumeMounts:
+                - name: telegram-configs
+                  mountPath: /var/run/telegram-configs
+
+              resources:
+                requests:
+                  memory: 32Mi
+
+          grafana:
+            # Use admin credentials from existing secret
+            admin:
+              existingSecret: grafana-admin
+            # Grafana Configuration
+            envFromSecret: grafana-env
+            grafana.ini:
+              log:
+                mode: console
+              analytics:
+                enabled: false
+                reporting_enabled: false
+                check_for_updates: false
+                check_for_plugin_updates: false
+              server:
+                domain: grafana.mhnet.dev
+                root_url: "https://grafana.mhnet.dev"
+              auth.generic_oauth:
+                enabled: true
+                name: mhnet IDP
+                allow_sign_up: true
+                auto_login: true
+                scopes: openid email profile offline_access roles
+                email_attribute_path: email
+                login_attribute_path: username
+                name_attribute_path: full_name
+                role_attribute_path: "contains(resource_access.grafana.roles[*], 'admin') && 'GrafanaAdmin' || contains(resource_access.grafana.roles[*], 'editor') && 'Editor' || 'Viewer'"
+                allow_assign_grafana_admin: true
+                use_refresh_token: true
+            # Grafana Ingress
+            ingress:
+              enabled: true
+              annotations:
+                cert-manager.io/cluster-issuer: letsencrypt-production
+              hosts: ["grafana.mhnet.dev"]
+              tls:
+                - hosts: ["grafana.mhnet.dev"]
+                  secretName: grafana-ingress-tls
+            # Grafana Persistence
+            persistence:
+              enabled: true
+              type: sts
+              accessModes: ["ReadWriteOnce"]
+              size: 1Gi
+            # Grafana Monitoring
+            serviceMonitor:
+              # Unset stupid scrapeTimeout (they default it to 30s, which is
+              # incompatible with our scrapeInterval of 15s)
+              scrapeTimeout: ""
+            # Grafana Resources
+            resources:
+              requests:
+                memory: 256Mi
+
+          kubeEtcd:
+            # no etcd on k3s
+            enabled: false
+
+          kubeControllerManager:
+            endpoints: ["100.102.81.94"]
+          kubeScheduler:
+            endpoints: ["100.102.81.94"]
+
+          kubeProxy:
+            # kube-proxy is disabled (replaced by cilium)
+            enabled: false
+
+          prometheus:
+            prometheusSpec:
+              replicas: 1
+              scrapeInterval: 15s
+              retention: 30d
+
+              # Another dumbfuckery from kube-prometheus-stack; if you don't
+              # set selectors (e.g. to use ALL CONFIGS they set the helm release
+              # label as the default selector.)
+              podMonitorSelectorNilUsesHelmValues: false
+              probeSelectorNilUsesHelmValues: false
+              ruleSelectorNilUsesHelmValues: false
+              scrapeConfigSelectorNilUsesHelmValues: false
+              serviceMonitorSelectorNilUsesHelmValues: false
+
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 1Gi
+
+              storageSpec:
+                volumeClaimTemplate:
+                  spec:
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 40Gi
+
+  ignoreDifferences:
+    # Recent versions of K8s always return `apiVersion` and `kind` fields in
+    # `volumeClaimTemplates`, but our templates don't have them so instead we
+    # just tell ArgoCD to chill.
+    - group: apps
+      kind: StatefulSet
+      name: kube-prometheus-stack-grafana
+      jqPathExpressions:
+        - ".spec.volumeClaimTemplates[].apiVersion"
+        - ".spec.volumeClaimTemplates[].kind"
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: true
