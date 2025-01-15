@@ -15,7 +15,7 @@ spec:
       path: apps/kube-prometheus-stack
     - repoURL: "https://prometheus-community.github.io/helm-charts"
       chart: kube-prometheus-stack
-      targetRevision: "67.11.0"
+      targetRevision: "68.1.0"
       helm:
         # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
         # https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
