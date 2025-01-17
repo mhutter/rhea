@@ -23,21 +23,25 @@ spec:
           alertmanager:
             config:
               route:
-                receiver: telegram
+                receiver: pagerduty
               receivers:
                 - name: "null"
+                - name: pagerduty
+                  pagerduty_configs:
+                    - service_key_file: /var/run/configs/pagerDutyServiceKey
+                      send_resolved: true
                 - name: telegram
                   telegram_configs:
                     - chat_id: 27184418
-                      bot_token_file: /var/run/telegram-configs/botToken
+                      bot_token_file: /var/run/configs/telegramBotToken
             alertmanagerSpec:
               volumes:
-                - name: telegram-configs
+                - name: configs
                   secret:
-                    secretName: telegram-configs
+                    secretName: alertmanager-configs
               volumeMounts:
-                - name: telegram-configs
-                  mountPath: /var/run/telegram-configs
+                - name: configs
+                  mountPath: /var/run/configs
 
               resources:
                 requests:
