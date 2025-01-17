@@ -112,9 +112,16 @@ spec:
 
           prometheus-node-exporter:
             extraArgs:
-              - "--collector.filesystem.mount-points-exclude=^/(etc|run|var|sysroot/ostree/deploy|dev|proc|sys)($|/)"
-              - "--collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$"
-              - "--collector.netdev.device-exclude=^(lxc.+|cilium_.+)$"
+              - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+              - --collector.filesystem.mount-points-exclude=^/(etc|run|var|sysroot/ostree/deploy|dev|proc|sys)($|/)
+              - --collector.netdev.device-exclude=^(lxc.+|cilium_.+)$
+              - --collector.systemd
+              - --collector.systemd.unit-include=^(.*\.service)$
+            extraHostVolumeMounts:
+              - name: systemd
+                hostPath: /var/run/dbus/system_bus_socket
+                mountPath: /var/run/dbus/system_bus_socket
+                readOnly: true
 
           prometheus:
             prometheusSpec:
