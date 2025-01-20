@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: miniflux
-          image: "docker.io/miniflux/miniflux:2.2.4"
+          image: "docker.io/miniflux/miniflux:2.2.5"
           envFrom:
             - secretRef:
                 name: miniflux-env
