@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>mhutter/.github:renovate-config", ":automergePatch"],
+  "extends": ["local>mhutter/.github:renovate-config"],
   "enabledManagers": ["argocd", "kubernetes", "kustomize", "custom.regex"],
   "kustomize": {
     "fileMatch": ["(^|/)kustomization\\.ya?ml$"],
@@ -14,8 +14,22 @@
   },
   "packageRules": [
     {
-      "groupName": "docspell",
-      "matchPackageNames": ["docker.io/docspell/{/,}**"]
+      "description": "Group docspell updates",
+      "matchPackageNames": ["docker.io/docspell/{/,}**"],
+      "groupName": "docspell"
+    },
+    {
+      "description": "Automatically merge patc-level updates without creating a PR",
+      "matchUpdateTypes": ["patch", "digest"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "description": "Automatically merge minor-level updates for kube-prometheus-stack",
+      "matchPackageNames": ["kube-prometheus-stack"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "branch"
     }
   ],
   "customManagers": [
