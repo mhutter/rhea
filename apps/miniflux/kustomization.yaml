@@ -6,7 +6,7 @@ namespace: miniflux
 labels:
   - includeSelectors: true
     pairs:
-      app.kubernetes.io/part-of: miniflux
+      app.kubernetes.io/name: miniflux
 
 resources:
   - ./namespace.yaml

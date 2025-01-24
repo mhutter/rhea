@@ -1,22 +1,24 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: keycloak
-  labels:
-    app: keycloak
 spec:
+  type: ClusterIP
+  clusterIP: None
   ports:
     - name: web
       port: 8443
 
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: keycloak
 spec:
   replicas: 1
   revisionHistoryLimit: 3
+  serviceName: miniflux
   template:
     spec:
       containers:
