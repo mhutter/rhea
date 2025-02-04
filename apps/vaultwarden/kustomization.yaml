@@ -13,3 +13,11 @@ resources:
   - vaultwarden-env.sealed-secret.json
   - statefulset.yaml
   - ingress.yaml
+
+patches:
+  - target:
+      kind: StatefulSet
+    patch: |-
+      - op: replace
+        path: /spec/revisionHistoryLimit
+        value: 2

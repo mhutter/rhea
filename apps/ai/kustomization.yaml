@@ -14,3 +14,11 @@ resources:
   - ./open-webui.yaml
   - ./open-webui-env.sealed-secret.json
   - ./ingress.yaml
+
+patches:
+  - target:
+      kind: StatefulSet
+    patch: |-
+      - op: replace
+        path: /spec/revisionHistoryLimit
+        value: 2

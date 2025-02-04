@@ -11,3 +11,22 @@ resources:
 patches:
   - path: ./argocd-cm.patch.yaml
   - path: ./argocd-rbac-cm.patch.yaml
+
+  - target:
+      kind: Daemonset
+    patch: |-
+      - op: replace
+        path: /spec/revisionHistoryLimit
+        value: 2
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: replace
+        path: /spec/revisionHistoryLimit
+        value: 2
+  - target:
+      kind: StatefulSet
+    patch: |-
+      - op: replace
+        path: /spec/revisionHistoryLimit
+        value: 2
