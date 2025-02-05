@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: miniflux
+  name: open-webui
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -20,4 +20,4 @@ spec:
   tls:
     - hosts:
         - ai.mhnet.app
-      secretName: miniflux-ingress-tls
+      secretName: open-webui-ingress-tls
