@@ -33,7 +33,7 @@ spec:
           image: "ghcr.io/open-webui/open-webui:0.5.9"
           env:
             - name: OLLAMA_BASE_URL
-              value: "http://ollama:11434"
+              value: "http://100.112.141.2:11434"
             - name: CUSTOM_NAME
               value: mhnet AI
             - name: WEBUI_URL
