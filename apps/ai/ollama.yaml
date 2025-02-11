@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: ollama
-          image: "docker.io/ollama/ollama:0.5.7"
+          image: "docker.io/ollama/ollama:0.5.8"
           env:
             - name: HOME
               value: /data
