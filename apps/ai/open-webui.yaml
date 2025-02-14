@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: open-webui
-          image: "ghcr.io/open-webui/open-webui:v0.5.11"
+          image: "ghcr.io/open-webui/open-webui:0.5.12"
           env:
             - name: OLLAMA_BASE_URL
               value: "http://100.112.141.2:11434"
