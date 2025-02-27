@@ -24,6 +24,12 @@ spec:
           operator:
             clusterPoolIPv4PodCIDRList:
               - "10.42.0.0/16"
+  ignoreDifferences:
+    # can be removed once https://github.com/cilium/cilium/pull/37585 is released
+    - kind: ConfigMap
+      name: cilium-config
+      jsonPointers:
+        - /data/ipam-multi-pool-pre-allocation
 
   syncPolicy:
     automated:
