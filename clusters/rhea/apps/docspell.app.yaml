@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: docspell
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: apps
+  destination:
+    namespace: docspell
+    server: "https://kubernetes.default.svc"
+  source:
+    repoURL: "https://github.com/mhutter/rhea.git"
+    targetRevision: HEAD
+    path: apps/docspell
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,82 @@
+local k = import '../../lib/k.libsonnet';
+local mh = import '../../lib/mh.libsonnet';
+local params = import 'params.libsonnet';
+
+local defaultEnv(infix) = {
+  TZ: 'Europe/Zurich',
+  POD_NAME: {
+    fieldPath: 'metadata.name',
+  },
+  POD_NAMESPACE: {
+    fieldPath: 'metadata.namespace',
+  },
+  ['DOCSPELL_%s_APP__ID' % infix]: '$(POD_NAME)',
+  ['DOCSPELL_%s_BIND_ADDRESS' % infix]: '0.0.0.0',
+  ['DOCSPELL_%s_FULL__TEXT__SEARCH_ENABLED' % infix]: 'true',
+  ['DOCSPELL_%s_FULL__TEXT__SEARCH_BACKEND' % infix]: 'solr',
+  ['DOCSPELL_%s_FULL__TEXT__SEARCH_SOLR_URL' % infix]: 'http://solr:8983/solr/docspell',
+};
+
+local restserver = mh.workload(
+  name='restserver',
+  image='ghcr.io/docspell/restserver:v0.42.0',
+  port=7880,
+  host=params.host,
+  env=defaultEnv('SERVER') {
+    DOCSPELL_SERVER_APP__NAME: 'mhnet DMS',
+    DOCSPELL_SERVER_BASE__URL: 'https://' + params.host,
+    DOCSPELL_SERVER_INTERNAL__URL: 'http://restserver:7880',
+  } + {
+    ['DOCSPELL_SERVER_BACKEND_JDBC_%s' % key]: {
+      secretName: 'db-creds',
+      key: key,
+    }
+    for key in ['URL', 'USER', 'PASSWORD']
+  },
+  envFromSecret=['docspell-auth'],
+);
+
+local joex = mh.workload(
+  name='joex',
+  image='ghcr.io/docspell/joex:v0.42.0',
+  port=7878,
+  env=defaultEnv('JOEX') {
+    DOCSPELL_JOEX_PERIODIC__SCHEDULER_NAME: '$(POD_NAME)',
+    DOCSPELL_JOEX_SCHEDULER_NAME: '$(POD_NAME)',
+    DOCSPELL_JOEX_BASE__URL: 'http://joex:7878',
+  } + {
+    ['DOCSPELL_JOEX_JDBC_%s' % key]: {
+      secretName: 'db-creds',
+      key: key,
+    }
+    for key in ['URL', 'USER', 'PASSWORD']
+  },
+);
+
+local solr = mh.workload(
+  name='solr',
+  image='docker.io/library/solr:9',
+  cmd=['solr', '-f', '--user-managed', '-Dsolr.modules=analysis-extras'],
+  port=8983,
+  readinessPath='/solr/docspell/admin/ping',
+  initContainers=[{
+    name: 'precreate-core',
+    command: ['/bin/sh', '-c', 'mkdir -pv /var/solr/data; precreate-core docspell'],
+  }],
+  volumes={
+    data: '/var/solr',
+  }
+);
+
+
+k.List(
+  [
+    k.Namespace('docspell'),
+    k.Ingress(params.host, 'restserver'),
+    import './db-creds.sealed-secret.json',
+    import './docspell-auth.sealed-secret.json',
+  ]
+  + std.objectValues(restserver)
+  + std.objectValues(joex)
+  + std.objectValues(solr)
+)

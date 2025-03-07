@@ -9,19 +9,25 @@ trap cleanup EXIT
 
 ERRORS=0
 while read -r dir; do
+  echo
   echo "---> ${dir}";
 
   if [ -f "${dir}/Chart.yaml" ]; then
     echo "     Helm Chart"
     MANIFESTS="$(helm template "${dir}")"
-  else
+  elif [ -f "${dir}/kustomization.yaml" ]; then
     echo "     Kustomization"
     MANIFESTS="$(kustomize build "${dir}")"
+  else
+    echo "     Jsonnet"
+    MANIFESTS="$(find "${dir}" -name '*.jsonnet' | xargs -n1 jsonnet -J lib)"
   fi
 
   set +e
   echo "$MANIFESTS" | \
-  kubeconform -cache "$CACHE" \
+  kubeconform -cache "$CACHE" -summary \
+    -strict \
+    -schema-location default \
     -schema-location 'https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/{{.NormalizedKubernetesVersion}}/{{.ResourceKind}}.json' \
     -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
   CODE="$?"
