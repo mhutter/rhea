@@ -19,7 +19,7 @@ local defaultEnv(infix) = {
 
 local restserver = mh.workload(
   name='restserver',
-  image='ghcr.io/docspell/restserver:v0.42.0',
+  image='ghcr.io/docspell/restserver:' + params.version,
   port=7880,
   host=params.host,
   env=defaultEnv('SERVER') {
@@ -38,7 +38,7 @@ local restserver = mh.workload(
 
 local joex = mh.workload(
   name='joex',
-  image='ghcr.io/docspell/joex:v0.42.0',
+  image='ghcr.io/docspell/joex:' + params.version,
   port=7878,
   env=defaultEnv('JOEX') {
     DOCSPELL_JOEX_PERIODIC__SCHEDULER_NAME: '$(POD_NAME)',
