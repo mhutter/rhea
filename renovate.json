@@ -14,11 +14,6 @@
   },
   "packageRules": [
     {
-      "description": "Group docspell updates",
-      "matchPackageNames": ["docker.io/docspell/{/,}**"],
-      "groupName": "docspell"
-    },
-    {
       "description": "Automatically merge patc-level updates without creating a PR",
       "matchUpdateTypes": ["patch", "digest"],
       "automerge": true,
@@ -36,7 +31,15 @@
     {
       "customType": "regex",
       "fileMatch": ["\\.jsonnet$"],
-      "matchStrings": ["image='(?<depName>[^:]+):(?<currentValue>[^']+)'"],
+      "matchStrings": ["image='(?<depName>[^:]+):(?<currentValue>[^']+)',"],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)params\\.jsonnet$"],
+      "matchStrings": [
+        "// renovate:( datasource=(?<datasource>.+?)| depName=(?<depName>.+?)| packageName=(?<packageName>.+?)| versioning=(?<versioning>.+?))+\\n\\s*\\S+: '(?<currentValue>[^']+)'"
+      ],
       "datasourceTemplate": "docker"
     },
     {
