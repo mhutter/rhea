@@ -72,9 +72,6 @@ local solr = mh.workload(
 k.List(
   [
     k.Namespace('docspell'),
-    k.Ingress(params.host, 'restserver'),
-    import './db-creds.sealed-secret.json',
-    import './docspell-auth.sealed-secret.json',
   ]
   + std.objectValues(restserver)
   + std.objectValues(joex)
