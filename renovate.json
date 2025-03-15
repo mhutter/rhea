@@ -27,11 +27,6 @@
       "automergeType": "branch"
     }
   ],
-  "postUpgradeTasks": {
-    "commands": ["./script/snapshot.sh update"],
-    "fileFilters": ["apps/**/*.jsonnet", "apps/**/*.libsonnet"],
-    "executionMode": "branch"
-  },
   "customManagers": [
     {
       "customType": "regex",
