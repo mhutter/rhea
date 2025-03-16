@@ -1,4 +1,12 @@
 ---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: open-webui-env
+spec:
+  itemPath: "vaults/rhea/items/open-webui-env"
+
+---
 apiVersion: v1
 kind: Service
 metadata:
