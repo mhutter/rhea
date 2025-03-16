@@ -12,6 +12,7 @@ spec:
     - namespace: "*"
       server: "https://kubernetes.default.svc"
   sourceRepos:
+    - "https://1password.github.io/connect-helm-charts"
     - "https://github.com/mdonoughe/porkbun-webhook.git"
     - "https://github.com/mhutter/rhea.git"
     - "https://helm.cilium.io/"
