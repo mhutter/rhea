@@ -196,7 +196,7 @@
                               }
                            }
                         ],
-                        "image": "ghcr.io/docspell/restserver:v0.43.0",
+                        "image": "ghcr.io/docspell/restserver:v0.42.0",
                         "livenessProbe": {
                            "tcpSocket": {
                               "port": 7880
@@ -382,7 +382,7 @@
                            }
                         ],
                         "envFrom": [ ],
-                        "image": "ghcr.io/docspell/joex:v0.43.0",
+                        "image": "ghcr.io/docspell/joex:v0.42.0",
                         "livenessProbe": {
                            "tcpSocket": {
                               "port": 7878
