@@ -19,7 +19,8 @@
          "kind": "Ingress",
          "metadata": {
             "annotations": {
-               "cert-manager.io/cluster-issuer": "letsencrypt-production"
+               "cert-manager.io/cluster-issuer": "letsencrypt-production",
+               "nginx.ingress.kubernetes.io/proxy-body-size": "8m"
             },
             "name": "dms-mhnet-app"
          },

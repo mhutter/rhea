@@ -34,7 +34,15 @@ local restserver = mh.workload(
     for key in ['URL', 'USER', 'PASSWORD']
   },
   envFromSecret=['docspell-auth'],
-);
+) + {
+  ingress+: {
+    metadata+: {
+      annotations+: {
+        'nginx.ingress.kubernetes.io/proxy-body-size': '8m',
+      },
+    },
+  },
+};
 
 local joex = mh.workload(
   name='joex',
