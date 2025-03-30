@@ -4,7 +4,7 @@ kind: OnePasswordItem
 metadata:
   name: postgres-creds
 spec:
-  itemPath: "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqa3cjlfcpkwfk5o7pvmlkvwwtxa"
+  itemPath: "vaults/rhea/items/a3cjlfcpkwfk5o7pvmlkvwwtxa"
 
 ---
 apiVersion: v1

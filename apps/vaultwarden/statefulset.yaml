@@ -4,7 +4,7 @@ kind: OnePasswordItem
 metadata:
   name: vaultwarden-env
 spec:
-  itemPath: "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqltcucsjdwsl6ucg4ravehvidxq"
+  itemPath: "vaults/rhea/items/ltcucsjdwsl6ucg4ravehvidxq"
 
 ---
 apiVersion: v1

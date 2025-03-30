@@ -21,7 +21,7 @@
             "name": "db-creds"
          },
          "spec": {
-            "itemPath": "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqf2k4enieu2fbfeuacqlhqytwh4"
+            "itemPath": "vaults/rhea/items/f2k4enieu2fbfeuacqlhqytwh4"
          }
       },
       {
@@ -31,7 +31,7 @@
             "name": "docspell-auth"
          },
          "spec": {
-            "itemPath": "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqqk6xszgwadwt4s5ayrwmy4xqty"
+            "itemPath": "vaults/rhea/items/qk6xszgwadwt4s5ayrwmy4xqty"
          }
       },
       {

@@ -80,8 +80,8 @@ local solr = mh.workload(
 k.List(
   [
     k.Namespace('docspell'),
-    mh.OnePasswordItem('db-creds', 'rhea', 'wvogl5p3dfqqfnbem3vxqipluqf2k4enieu2fbfeuacqlhqytwh4'),
-    mh.OnePasswordItem('docspell-auth', 'rhea', 'wvogl5p3dfqqfnbem3vxqipluqqk6xszgwadwt4s5ayrwmy4xqty'),
+    mh.OnePasswordItem('db-creds', 'rhea', 'f2k4enieu2fbfeuacqlhqytwh4'),
+    mh.OnePasswordItem('docspell-auth', 'rhea', 'qk6xszgwadwt4s5ayrwmy4xqty'),
   ]
   + std.objectValues(restserver)
   + std.objectValues(joex)
