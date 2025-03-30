@@ -1,3 +1,12 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: vaultwarden-env
+spec:
+  itemPath: "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqltcucsjdwsl6ucg4ravehvidxq"
+
+---
 apiVersion: v1
 kind: Service
 metadata:

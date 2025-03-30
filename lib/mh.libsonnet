@@ -140,7 +140,19 @@ local workload(
   },
 };
 
+local OnePasswordItem(name, vault, item) = {
+  apiVersion: 'onepassword.com/v1',
+  kind: 'OnePasswordItem',
+  metadata: {
+    name: name,
+  },
+  spec: {
+    itemPath: 'vaults/%s/items/%s' % [vault, item],
+  },
+};
+
 // exports
 {
   workload: workload,
+  OnePasswordItem: OnePasswordItem,
 }

@@ -15,6 +15,26 @@
          }
       },
       {
+         "apiVersion": "onepassword.com/v1",
+         "kind": "OnePasswordItem",
+         "metadata": {
+            "name": "db-creds"
+         },
+         "spec": {
+            "itemPath": "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqf2k4enieu2fbfeuacqlhqytwh4"
+         }
+      },
+      {
+         "apiVersion": "onepassword.com/v1",
+         "kind": "OnePasswordItem",
+         "metadata": {
+            "name": "docspell-auth"
+         },
+         "spec": {
+            "itemPath": "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqqk6xszgwadwt4s5ayrwmy4xqty"
+         }
+      },
+      {
          "apiVersion": "networking.k8s.io/v1",
          "kind": "Ingress",
          "metadata": {

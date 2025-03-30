@@ -11,6 +11,5 @@ labels:
 resources:
   - ./namespace.yaml
   - ./certificate.yaml
-  - ./keycloak-env.sealed-secret.json
   - ./keycloak.yaml
   - ./ingress.yaml
