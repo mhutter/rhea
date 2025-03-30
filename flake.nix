@@ -11,7 +11,6 @@
           butane
           cilium-cli
           kubeconform
-          kubeseal
           kustomize
         ];
       };

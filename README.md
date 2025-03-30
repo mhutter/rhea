@@ -2,13 +2,19 @@
 
 ## Secrets
 
-The easiest way to generate SealedSecrets is to create a file called `something.secret.yaml`, and then use `make something.sealed-secret.json` to generate the SealedSecret using kubeseal. Make sure to put the Namespace in the Secret yaml, as SealedSecret resources are namespace-specific!
+Secrets are managed using the [1Password Kubernetes Operator](https://developer.1password.com/docs/k8s/operator/).
+
+NOTE: When extracting the Item ID from the URL, note that the URL repeats the Vault ID:
+
+    https://my.1password.com/app#/XXX/AllItems/XXXYYY
+
+where `XXX` is the Vault ID, and `YYY` the Item ID.
 
 ## Creating PostgreSQL databases
 
 ```sh
 APP=someapp
-k exec -it psql-0 -- /scripts/createdb.sh $APP | kubeseal -n $APP
+k exec -it psql-0 -- /scripts/createdb.sh $APP
 ```
 
 ## Installing the 1Password operator
