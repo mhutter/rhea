@@ -1,3 +1,12 @@
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: keycloak-env
+spec:
+  itemPath: "vaults/rhea/items/wvogl5p3dfqqfnbem3vxqipluqxjnulbtbtqqmvublmwnhppu2le"
+
+---
 apiVersion: v1
 kind: Service
 metadata:

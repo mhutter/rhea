@@ -10,6 +10,5 @@ labels:
 
 resources:
   - ./namespace.yaml
-  - ./miniflux-env.sealed-secret.json
   - ./miniflux.yaml
   - ./ingress.yaml
