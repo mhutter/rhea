@@ -4,7 +4,7 @@ kind: OnePasswordItem
 metadata:
   name: keycloak-env
 spec:
-  itemPath: "vaults/rhea/items/xjnulbtbtqqmvublmwnhppu2le"
+  itemPath: "vaults/rhea/items/aqjoopbgdledsdegaxtxjsjtjm"
 
 ---
 apiVersion: v1
