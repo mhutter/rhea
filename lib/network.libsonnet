@@ -1,4 +1,4 @@
-local Ingress(host, service) =
+local Ingress(host, service, port='') =
   local name = std.strReplace(host, '.', '-');
   {
     apiVersion: 'networking.k8s.io/v1',
@@ -17,7 +17,7 @@ local Ingress(host, service) =
             backend: {
               service: {
                 name: service,
-                port: { name: service },
+                port: { name: if port == '' then service else port },
               },
             },
             path: '/',
@@ -32,7 +32,7 @@ local Ingress(host, service) =
     },
   };
 
-local Service(name, port, headless=false) =
+local Service(name, ports, headless=false) =
   local selector = { app: name };
   {
     apiVersion: 'v1',
@@ -44,11 +44,10 @@ local Service(name, port, headless=false) =
     spec: {
       type: 'ClusterIP',
       [if headless then 'clusterIP']: 'None',
-      ports: [{ name: name, port: port }],
+      ports: std.map(function(p) { name: p.key, port: p.value.number }, std.objectKeysValues(ports)),
       selector: selector,
     },
   };
-
 
 {
   Ingress: Ingress,

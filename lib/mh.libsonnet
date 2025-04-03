@@ -6,7 +6,7 @@ local network = import 'network.libsonnet';
 // Required parameters
 // - `name` - the display name of the workload. Only used internally.
 // - `image` - the image of the primary app container
-// - `port` - the port of the primary app container
+// - `ports` - (exposed) ports in format `{name: { number: 1234, host: null/"asdf" }}`
 //
 // Optional parameters
 // - `cmd` - The command of the primary app container
@@ -19,14 +19,15 @@ local network = import 'network.libsonnet';
 local workload(
   name,
   image,
-  port,
+  // { name: {number, host=null}},
+  ports,
   cmd=[],
   env={},
   envFromSecret=[],
-  host=null,
   initContainers=[],
   readinessPath=null,
   volumes={},
+  extraContainerConfig={},
       ) = {
   // Common labels, also used as selectors
   //
@@ -48,6 +49,11 @@ local workload(
     1,
   ),
 
+  // Define the port used in probes.
+  //
+  // Can be overwritten by merging `{ probePort:: 1234 }`
+  probePort:: std.objectValues(ports)[0].number,
+
   local defaultContainerConfig = {
     image: image,
     securityContext: {
@@ -59,9 +65,7 @@ local workload(
 
   local mapVolumes(fn) = std.map(fn, std.objectKeysValues(volumes)),
 
-  service: network.Service(name, port, headless=true),
-
-  [if host != null then 'ingress']: network.Ingress(host, name),
+  service: network.Service(name, ports, headless=true),
 
   statefulset: {
     apiVersion: 'apps/v1',
@@ -92,20 +96,20 @@ local workload(
             name: name,
             // image: is in defaultContainerConfig
             [if std.length(cmd) > 0 then 'command']: cmd,
-            ports: [{ name: name, containerPort: port }],
+            ports: std.map(function(p) { name: p.key, containerPort: p.value.number }, std.objectKeysValues(ports)),
 
             env: libEnv.fromObj(env),
             envFrom: std.map(function(secret) { secretRef: { name: secret } }, envFromSecret),
 
-            livenessProbe: { tcpSocket: { port: port } },
+            livenessProbe: { tcpSocket: { port: $.probePort } },
             readinessProbe:
               if readinessPath == null
               then
-                { tcpSocket: { port: port } }
+                { tcpSocket: { port: $.probePort } }
               else
-                { httpGet: { port: port, path: readinessPath } },
+                { httpGet: { port: $.probePort, path: readinessPath } },
             startupProbe: self.readinessProbe { failureThreshold: 30 },
-          }],
+          } + extraContainerConfig],
 
           securityContext: {
             runAsNonRoot: true,
@@ -138,7 +142,12 @@ local workload(
       }),
     },
   },
-};
+} + {
+  ['ingress_' + port.key]: network.Ingress(port.value.host, name, port.key)
+  for port in std.filter(function(port) std.get(port.value, 'host', default=null) != null, std.objectKeysValues(ports))
+}
+;
+
 
 local OnePasswordItem(name, id) =
   local vault = id[0:26];
