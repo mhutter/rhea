@@ -20,8 +20,9 @@ local defaultEnv(infix) = {
 local restserver = mh.workload(
   name='restserver',
   image='ghcr.io/docspell/restserver:' + params.version,
-  port=7880,
-  host=params.host,
+  ports={
+    restserver: { number: 7880, host: params.host },
+  },
   env=defaultEnv('SERVER') {
     DOCSPELL_SERVER_APP__NAME: 'mhnet DMS',
     DOCSPELL_SERVER_BASE__URL: 'https://' + params.host,
@@ -35,7 +36,7 @@ local restserver = mh.workload(
   },
   envFromSecret=['docspell-auth'],
 ) + {
-  ingress+: {
+  ingress_restserver+: {
     metadata+: {
       annotations+: {
         'nginx.ingress.kubernetes.io/proxy-body-size': '8m',
@@ -47,7 +48,9 @@ local restserver = mh.workload(
 local joex = mh.workload(
   name='joex',
   image='ghcr.io/docspell/joex:' + params.version,
-  port=7878,
+  ports={
+    joex: { number: 7878 },
+  },
   env=defaultEnv('JOEX') {
     DOCSPELL_JOEX_PERIODIC__SCHEDULER_NAME: '$(POD_NAME)',
     DOCSPELL_JOEX_SCHEDULER_NAME: '$(POD_NAME)',
@@ -65,7 +68,7 @@ local solr = mh.workload(
   name='solr',
   image='docker.io/library/solr:9',
   cmd=['solr', '-f', '--user-managed', '-Dsolr.modules=analysis-extras'],
-  port=8983,
+  ports={ solr: { number: 8983 } },
   readinessPath='/solr/docspell/admin/ping',
   initContainers=[{
     name: 'precreate-core',

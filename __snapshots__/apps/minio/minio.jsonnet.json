@@ -1,0 +1,292 @@
+{
+   "apiVersion": "v1",
+   "items": [
+      {
+         "apiVersion": "v1",
+         "kind": "Namespace",
+         "metadata": {
+            "labels": {
+               "pod-security.kubernetes.io/enforce": "restricted",
+               "pod-security.kubernetes.io/enforce-version": "latest",
+               "pod-security.kubernetes.io/warn": "restricted",
+               "pod-security.kubernetes.io/warn-version": "latest"
+            },
+            "name": "minio"
+         }
+      },
+      {
+         "apiVersion": "onepassword.com/v1",
+         "kind": "OnePasswordItem",
+         "metadata": {
+            "name": "minio-env"
+         },
+         "spec": {
+            "itemPath": "vaults/ygghe4vrf6je7fejk4hbncbhbe/items/c67rmqnsqi3tfrvna4tazwxvse"
+         }
+      },
+      {
+         "apiVersion": "networking.k8s.io/v1",
+         "kind": "Ingress",
+         "metadata": {
+            "annotations": {
+               "cert-manager.io/cluster-issuer": "letsencrypt-production"
+            },
+            "name": "s3-mhnet-app"
+         },
+         "spec": {
+            "rules": [
+               {
+                  "host": "s3.mhnet.app",
+                  "http": {
+                     "paths": [
+                        {
+                           "backend": {
+                              "service": {
+                                 "name": "minio",
+                                 "port": {
+                                    "name": "api"
+                                 }
+                              }
+                           },
+                           "path": "/",
+                           "pathType": "Prefix"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "tls": [
+               {
+                  "hosts": [
+                     "s3.mhnet.app"
+                  ],
+                  "secretName": "s3-mhnet-app-tls"
+               }
+            ]
+         }
+      },
+      {
+         "apiVersion": "networking.k8s.io/v1",
+         "kind": "Ingress",
+         "metadata": {
+            "annotations": {
+               "cert-manager.io/cluster-issuer": "letsencrypt-production"
+            },
+            "name": "s3admin-mhnet-dev"
+         },
+         "spec": {
+            "rules": [
+               {
+                  "host": "s3admin.mhnet.dev",
+                  "http": {
+                     "paths": [
+                        {
+                           "backend": {
+                              "service": {
+                                 "name": "minio",
+                                 "port": {
+                                    "name": "console"
+                                 }
+                              }
+                           },
+                           "path": "/",
+                           "pathType": "Prefix"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "tls": [
+               {
+                  "hosts": [
+                     "s3admin.mhnet.dev"
+                  ],
+                  "secretName": "s3admin-mhnet-dev-tls"
+               }
+            ]
+         }
+      },
+      {
+         "apiVersion": "v1",
+         "kind": "Service",
+         "metadata": {
+            "labels": {
+               "app": "minio"
+            },
+            "name": "minio"
+         },
+         "spec": {
+            "clusterIP": "None",
+            "ports": [
+               {
+                  "name": "api",
+                  "port": 9000
+               },
+               {
+                  "name": "console",
+                  "port": 9001
+               }
+            ],
+            "selector": {
+               "app": "minio"
+            },
+            "type": "ClusterIP"
+         }
+      },
+      {
+         "apiVersion": "apps/v1",
+         "kind": "StatefulSet",
+         "metadata": {
+            "labels": {
+               "app": "minio",
+               "app.kubernetes.io/component": "minio"
+            },
+            "name": "minio"
+         },
+         "spec": {
+            "revisionHistoryLimit": 1,
+            "selector": {
+               "matchLabels": {
+                  "app": "minio",
+                  "app.kubernetes.io/component": "minio"
+               }
+            },
+            "serviceName": "minio",
+            "template": {
+               "metadata": {
+                  "labels": {
+                     "app": "minio",
+                     "app.kubernetes.io/component": "minio"
+                  }
+               },
+               "spec": {
+                  "automountServiceAccountToken": false,
+                  "containers": [
+                     {
+                        "command": [
+                           "minio",
+                           "server"
+                        ],
+                        "env": [
+                           {
+                              "name": "MINIO_BROWSER_LOGIN_ANIMATION",
+                              "value": "off"
+                           },
+                           {
+                              "name": "MINIO_BROWSER_REDIRECT",
+                              "value": "false"
+                           },
+                           {
+                              "name": "MINIO_BROWSER_REDIRECT_URL",
+                              "value": "https://s3admin.mhnet.dev"
+                           },
+                           {
+                              "name": "MINIO_CONSOLE_ADDRESS",
+                              "value": ":9001"
+                           },
+                           {
+                              "name": "MINIO_DOMAIN",
+                              "value": "s3.mhnet.app"
+                           },
+                           {
+                              "name": "MINIO_VOLUMES",
+                              "value": "/data"
+                           }
+                        ],
+                        "envFrom": [
+                           {
+                              "secretRef": {
+                                 "name": "minio-env"
+                              }
+                           }
+                        ],
+                        "image": "quay.io/minio/minio:RELEASE.2025-03-12T18-04-18Z",
+                        "livenessProbe": {
+                           "tcpSocket": {
+                              "port": 9000
+                           }
+                        },
+                        "name": "minio",
+                        "ports": [
+                           {
+                              "containerPort": 9000,
+                              "name": "api"
+                           },
+                           {
+                              "containerPort": 9001,
+                              "name": "console"
+                           }
+                        ],
+                        "readinessProbe": {
+                           "httpGet": {
+                              "path": "/minio/health/live",
+                              "port": 9000
+                           }
+                        },
+                        "securityContext": {
+                           "allowPrivilegeEscalation": false,
+                           "capabilities": {
+                              "drop": [
+                                 "ALL"
+                              ]
+                           }
+                        },
+                        "startupProbe": {
+                           "failureThreshold": 30,
+                           "httpGet": {
+                              "path": "/minio/health/live",
+                              "port": 9000
+                           }
+                        },
+                        "volumeMounts": [
+                           {
+                              "mountPath": "/data",
+                              "name": "data"
+                           }
+                        ]
+                     }
+                  ],
+                  "enableServiceLinks": false,
+                  "initContainers": [ ],
+                  "securityContext": {
+                     "runAsGroup": 202203,
+                     "runAsNonRoot": true,
+                     "runAsUser": 202203,
+                     "seccompProfile": {
+                        "type": "RuntimeDefault"
+                     }
+                  },
+                  "volumes": [
+                     {
+                        "name": "data",
+                        "persistentVolumeClaim": {
+                           "claimName": "data"
+                        }
+                     }
+                  ]
+               }
+            },
+            "volumeClaimTemplates": [
+               {
+                  "apiVersion": "v1",
+                  "kind": "PersistentVolumeClaim",
+                  "metadata": {
+                     "name": "data"
+                  },
+                  "spec": {
+                     "accessModes": [
+                        "ReadWriteOnce"
+                     ],
+                     "resources": {
+                        "requests": {
+                           "storage": "1Gi"
+                        }
+                     }
+                  }
+               }
+            ]
+         }
+      }
+   ],
+   "kind": "List"
+}
