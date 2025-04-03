@@ -76,12 +76,11 @@ local solr = mh.workload(
   }
 );
 
-
 k.List(
   [
     k.Namespace('docspell'),
-    mh.OnePasswordItem('db-creds', 'rhea', 'f2k4enieu2fbfeuacqlhqytwh4'),
-    mh.OnePasswordItem('docspell-auth', 'rhea', 'qk6xszgwadwt4s5ayrwmy4xqty'),
+    mh.OnePasswordItem('db-creds', 'ygghe4vrf6je7fejk4hbncbhbedwlorl4sz7xfiol4avrodmj7mi'),
+    mh.OnePasswordItem('docspell-auth', 'ygghe4vrf6je7fejk4hbncbhbejkehpdmkbv2bd4enp43g72oeny'),
   ]
   + std.objectValues(restserver)
   + std.objectValues(joex)

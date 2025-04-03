@@ -4,7 +4,7 @@ kind: OnePasswordItem
 metadata:
   name: miniflux-env
 spec:
-  itemPath: "vaults/rhea/items/jtsd2nvea7bkb5x3s65jfgvhh4"
+  itemPath: "vaults/rhea/items/nhdou6ingsxnpbyecrtsiipiyy"
 
 ---
 apiVersion: v1
