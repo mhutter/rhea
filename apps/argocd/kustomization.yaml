@@ -13,20 +13,28 @@ patches:
   - path: ./argocd-rbac-cm.patch.yaml
 
   - target:
+      kind: Service
+      name: argocd-server
+    patch: |-
+      - op: add
+        path: /metadata/annotations/traefik.ingress.kubernetes.io~1service.serverstransport
+        value: argocd-argocd-server@kubernetescrd
+
+  - target:
       kind: Daemonset
     patch: |-
       - op: replace
         path: /spec/revisionHistoryLimit
-        value: 2
+        value: 1
   - target:
       kind: Deployment
     patch: |-
       - op: replace
         path: /spec/revisionHistoryLimit
-        value: 2
+        value: 1
   - target:
       kind: StatefulSet
     patch: |-
       - op: replace
         path: /spec/revisionHistoryLimit
-        value: 2
+        value: 1
