@@ -4,7 +4,6 @@ metadata:
   name: open-webui
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
     - host: ai.mhnet.app

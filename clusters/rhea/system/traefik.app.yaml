@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: system
+  destination:
+    namespace: traefik
+    server: "https://kubernetes.default.svc"
+  source:
+    repoURL: ghcr.io/traefik/helm
+    chart: traefik
+    targetRevision: 35.0.1
+    helm:
+      valuesObject:
+        deployment:
+          kind: DaemonSet
+          revisionHistoryLimit: 1
+        updateStrategy:
+          rollingUpdate:
+            maxUnavailable: 1
+            maxSurge: ""
+
+        service:
+          type: NodePort
+
+        ports:
+          websecure:
+            hostPort: 443
+          web:
+            hostPort: 80
+            redirections:
+              entryPoint:
+                to: websecure
+                scheme: https
+                permanent: true
+
+        ingressRoute:
+          dashboard:
+            enabled: true
+
+        metrics:
+          prometheus:
+            service:
+              enabled: true
+            serviceMonitor:
+              enabled: true
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: true

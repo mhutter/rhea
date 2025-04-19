@@ -26,7 +26,7 @@ spec:
                 key: secret-key
       - http01:
           ingress:
-            ingressClassName: nginx
+            ingressClassName: traefik
 
 ---
 apiVersion: cert-manager.io/v1
@@ -57,4 +57,4 @@ spec:
                 key: secret-key
       - http01:
           ingress:
-            ingressClassName: nginx
+            ingressClassName: traefik
