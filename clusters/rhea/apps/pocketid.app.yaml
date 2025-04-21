@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pocketid
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: apps
+  destination:
+    namespace: pocketid
+    server: "https://kubernetes.default.svc"
+  source:
+    repoURL: "https://github.com/mhutter/rhea.git"
+    targetRevision: HEAD
+    path: apps/pocketid
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
