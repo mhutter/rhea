@@ -18,6 +18,7 @@ spec:
     - "https://helm.cilium.io/"
     - "https://k8up-io.github.io/k8up"
     - "https://prometheus-community.github.io/helm-charts"
+    - "ghcr.io/traefik/helm"
 
 ---
 apiVersion: argoproj.io/v1alpha1
