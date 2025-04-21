@@ -23,9 +23,6 @@ spec:
             maxUnavailable: 1
             maxSurge: ""
 
-        service:
-          type: NodePort
-
         ports:
           websecure:
             hostPort: 443
@@ -36,10 +33,6 @@ spec:
                 to: websecure
                 scheme: https
                 permanent: true
-
-        ingressRoute:
-          dashboard:
-            enabled: true
 
         metrics:
           prometheus:
