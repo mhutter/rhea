@@ -5,6 +5,7 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
+  - secrets.yaml
   - "https://raw.githubusercontent.com/argoproj/argo-cd/v2.14.10/manifests/install.yaml"
   - ingress.yaml
 
