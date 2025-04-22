@@ -43,19 +43,17 @@ spec:
             - name: OLLAMA_BASE_URL
               value: "http://100.112.141.2:11434"
             - name: CUSTOM_NAME
-              value: mhnet AI
+              value: "mhnet AI"
             - name: WEBUI_URL
               value: "https://ai.mhnet.app"
             - name: CORS_ALLOW_ORIGIN
               value: "https://ai.mhnet.app"
             - name: ENABLE_LOGIN_FORM
-              value: "False"
+              value: "false"
             - name: ENABLE_OAUTH_SIGNUP
-              value: "True"
-            - name: OAUTH_PROVIDER_NAME
-              value: mhnet IDP
+              value: "true"
             - name: ENABLE_OAUTH_ROLE_MANAGEMENT
-              value: "True"
+              value: "true"
             - name: OAUTH_ADMIN_ROLES
               value: "admin"
           envFrom:
