@@ -57,6 +57,8 @@ spec:
               value: "https://feeds.mhnet.app/oauth2/oidc/callback"
             - name: OAUTH2_USER_CREATION
               value: "1"
+            - name: DISABLE_LOCAL_AUTH
+              value: "true"
             - name: RUN_MIGRATIONS
               value: "1"
           securityContext:
