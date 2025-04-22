@@ -14,9 +14,17 @@ data:
         - "*"
   # Configure OIDC
   url: "https://argocd.mhnet.dev"
-  oidc.config: |
-    name: mhnet IDP
-    issuer: https://id.mhnet.app/realms/mhnet-infra
-    clientID: argocd
-    clientSecret: $oidc.keycloak.clientSecret
-    requestedScopes: ["openid", "profile", "email", "groups"]
+  dex.config: |
+    connectors:
+      - type: oidc
+        id: pocketid
+        name: mhnet ID
+        config:
+          issuer: $oidc:issuer
+          clientID: $oidc:clientID
+          clientSecret: $oidc:clientSecret
+          insecureEnableGroups: true
+          scopes:
+          - profile
+          - email
+          - groups
