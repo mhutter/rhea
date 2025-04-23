@@ -4,7 +4,7 @@ kind: OnePasswordItem
 metadata:
   name: miniflux-env
 spec:
-  itemPath: "vaults/rhea/items/nhdou6ingsxnpbyecrtsiipiyy"
+  itemPath: "vaults/rhea/items/miniflux-env"
 
 ---
 apiVersion: v1
@@ -53,6 +53,10 @@ spec:
               value: "0"
             - name: OAUTH2_PROVIDER
               value: "oidc"
+            - name: OAUTH2_OIDC_PROVIDER_NAME
+              value: "mhnet ID"
+            - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
+              value: "https://id.mhnet.app"
             - name: OAUTH2_REDIRECT_URL
               value: "https://feeds.mhnet.app/oauth2/oidc/callback"
             - name: OAUTH2_USER_CREATION

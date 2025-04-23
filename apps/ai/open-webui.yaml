@@ -48,6 +48,10 @@ spec:
               value: "https://ai.mhnet.app"
             - name: CORS_ALLOW_ORIGIN
               value: "https://ai.mhnet.app"
+            - name: OAUTH_PROVIDER_NAME
+              value: "mhnet ID"
+            - name: OPENID_PROVIDER_URL
+              value: "https://id.mhnet.app/.well-known/openid-configuration"
             - name: ENABLE_LOGIN_FORM
               value: "false"
             - name: ENABLE_OAUTH_SIGNUP
