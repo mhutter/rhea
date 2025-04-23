@@ -12,13 +12,14 @@ spec:
     - namespace: "*"
       server: "https://kubernetes.default.svc"
   sourceRepos:
+    - "ghcr.io/traefik/helm"
     - "https://1password.github.io/connect-helm-charts"
     - "https://github.com/mdonoughe/porkbun-webhook.git"
     - "https://github.com/mhutter/rhea.git"
     - "https://helm.cilium.io/"
     - "https://k8up-io.github.io/k8up"
+    - "https://neuvector.github.io/neuvector-helm"
     - "https://prometheus-community.github.io/helm-charts"
-    - "ghcr.io/traefik/helm"
 
 ---
 apiVersion: argoproj.io/v1alpha1
