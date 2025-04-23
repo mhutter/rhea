@@ -150,8 +150,12 @@ local workload(
 
 
 local OnePasswordItem(name, id) =
-  local vault = id[0:26];
-  local item = id[26:];
+  local item = if std.length(std.findSubstr('/', id)) > 0 then
+    local parts = std.split(id, '/');
+    { vault: parts[0], name: parts[1] }
+  else
+    { vault: id[0:26], name: id[26:] };
+
   {
     apiVersion: 'onepassword.com/v1',
     kind: 'OnePasswordItem',
@@ -159,7 +163,7 @@ local OnePasswordItem(name, id) =
       name: name,
     },
     spec: {
-      itemPath: 'vaults/%s/items/%s' % [vault, item],
+      itemPath: 'vaults/%s/items/%s' % [item.vault, item.name],
     },
   };
 
