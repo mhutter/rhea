@@ -58,7 +58,7 @@ local joex = mh.workload(
 
 local solr = mh.workload(
   name='solr',
-  image='docker.io/library/solr:9',
+  image='docker.io/library/solr:' + params.solrVersion,
   cmd=['solr', '-f', '--user-managed', '-Dsolr.modules=analysis-extras'],
   ports={ solr: { number: 8983 } },
   readinessPath='/solr/docspell/admin/ping',
