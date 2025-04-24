@@ -25,6 +25,11 @@
       "matchUpdateTypes": ["minor", "patch", "digest"],
       "automerge": true,
       "automergeType": "branch"
+    },
+    {
+      "description": "Extract version for Hotio releases",
+      "matchDepNames": ["ghcr.io/hotio/*"],
+      "extractVersion": "^(release-)?(?<version>.*)$"
     }
   ],
   "customManagers": [
@@ -44,7 +49,9 @@
     {
       "customType": "regex",
       "fileMatch": ["(^|/)values\\.yaml$"],
-      "matchStrings": ["image: \"(?<depName>[^:]+):(?<currentValue>[^\"]+)\""],
+      "matchStrings": [
+        "image: \"(?<depName>[^:]+):(release-)?(?<currentValue>[^\"]+)\""
+      ],
       "datasourceTemplate": "docker"
     },
     {
