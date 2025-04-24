@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: neuvector
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: system
+  destination:
+    namespace: neuvector
+    server: "https://kubernetes.default.svc"
+  sources:
+    - repoURL: "https://neuvector.github.io/neuvector-helm"
+      chart: crd
+      targetRevision: "2.8.5"
+      helm:
+        valuesObject: {}
+    - repoURL: "https://neuvector.github.io/neuvector-helm"
+      chart: core
+      targetRevision: "2.8.5"
+      helm:
+        valuesObject:
+          runtimePath: /run/k3s/containerd/containerd.sock
+
+          controller:
+            replicas: 1
+            pvc:
+              enabled: true
+              accessModes: ["ReadWriteOnce"]
+
+          cve:
+            scanner:
+              replicas: 1
+
+          manager:
+            ingress:
+              enabled: true
+              host: nv.mhnet.dev
+              annotations:
+                cert-manager.io/cluster-issuer: letsencrypt-production
+              tls: true
+              secretName: nv-mhnet-dev-tls
+            svc:
+              annotations:
+                # Backend talks HTTPS
+                traefik.ingress.kubernetes.io/service.serversscheme: https
+                # Certificate does not include the service IP
+                traefik.ingress.kubernetes.io/service.serverstransport: traefik-insecure-skip-verify@kubernetescrd
+
+          # CRDs are installed via the `crd` chart
+          crdwebhook:
+            enabled: false
+
+          # Lease objects are ignored by ArgoCD anyway
+          lease:
+            enabled: false
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: true

@@ -41,6 +41,15 @@ spec:
             serviceMonitor:
               enabled: true
 
+        extraObjects:
+          - |
+            apiVersion: traefik.io/v1alpha1
+            kind: ServersTransport
+            metadata:
+              name: insecure-skip-verify
+            spec:
+              insecureSkipVerify: true
+
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
