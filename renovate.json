@@ -30,8 +30,15 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["\\.jsonnet$"],
-      "matchStrings": ["image='(?<depName>[^:]+):(?<currentValue>[^']+)',"],
+      "fileMatch": ["\\.jsonnet$", "(^|/)values\\.ya?ml$"],
+      "matchStrings": [
+        "image='(?<depName>[^:]+):(?<currentValue>[^']+)',",
+        "image: \"(?<depName>[^:]+):(?<currentValue>[^\"]+)'\""
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "datasourceTemplate": "docker"
     },
     {
