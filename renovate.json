@@ -36,16 +36,16 @@
     },
     {
       "customType": "regex",
-      "fileMatch": ["(^|/)values\\.yaml$"],
-      "matchStrings": ["image: \"(?<depName>[^:]+):(?<currentValue>[^\"]+)\""],
-      "datasourceTemplate": "docker"
-    },
-    {
-      "customType": "regex",
       "fileMatch": ["(^|/)params\\.libsonnet$"],
       "matchStrings": [
         "// renovate:( datasource=(?<datasource>.+?)| depName=(?<depName>.+?)| packageName=(?<packageName>.+?)| versioning=(?<versioning>.+?))+\\n\\s*\\S+: '(?<currentValue>[^']+)'"
       ]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)values\\.yaml$"],
+      "matchStrings": ["image: \"(?<depName>[^:]+):(?<currentValue>[^\"]+)\""],
+      "datasourceTemplate": "docker"
     },
     {
       "customType": "regex",
