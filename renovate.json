@@ -39,10 +39,6 @@
     },
     {
       "customType": "regex",
-      "datasourceTemplate": "docker"
-    },
-    {
-      "customType": "regex",
       "fileMatch": ["(^|/)params\\.libsonnet$"],
       "matchStrings": [
         "// renovate:( datasource=(?<datasource>.+?)| depName=(?<depName>.+?)| packageName=(?<packageName>.+?)| versioning=(?<versioning>.+?))+\\n\\s*\\S+: '(?<currentValue>[^']+)'"
