@@ -31,12 +31,12 @@
             "annotations": {
                "cert-manager.io/cluster-issuer": "letsencrypt-production"
             },
-            "name": "me-mhnet-app"
+            "name": "id-mhnet-app"
          },
          "spec": {
             "rules": [
                {
-                  "host": "me.mhnet.app",
+                  "host": "id.mhnet.app",
                   "http": {
                      "paths": [
                         {
@@ -58,9 +58,9 @@
             "tls": [
                {
                   "hosts": [
-                     "me.mhnet.app"
+                     "id.mhnet.app"
                   ],
-                  "secretName": "me-mhnet-app-tls"
+                  "secretName": "id-mhnet-app-tls"
                }
             ]
          }
@@ -125,7 +125,7 @@
                            },
                            {
                               "name": "PUBLIC_APP_URL",
-                              "value": "https://me.mhnet.app"
+                              "value": "https://id.mhnet.app"
                            },
                            {
                               "name": "TRUST_PROXY",

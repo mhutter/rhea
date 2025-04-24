@@ -20,7 +20,7 @@ local app = mh.workload(
     VIKUNJA_AUTH_LOCAL_ENABLED: 'false',
     VIKUNJA_AUTH_OPENID_ENABLED: 'true',
     VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_NAME: 'mhnet ID',
-    VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_AUTHURL: 'https://me.mhnet.app',
+    VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_AUTHURL: 'https://id.mhnet.app',
   },
   envFromSecret=['vikunja-env'],
   volumes={

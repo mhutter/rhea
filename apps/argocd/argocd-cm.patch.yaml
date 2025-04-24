@@ -20,7 +20,7 @@ data:
         id: pocketid
         name: mhnet ID
         config:
-          issuer: $oidc:issuer
+          issuer: "https://id.mhnet.app"
           clientID: $oidc:clientID
           clientSecret: $oidc:clientSecret
           insecureEnableGroups: true

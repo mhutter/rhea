@@ -129,7 +129,7 @@
                            },
                            {
                               "name": "VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_AUTHURL",
-                              "value": "https://me.mhnet.app"
+                              "value": "https://id.mhnet.app"
                            },
                            {
                               "name": "VIKUNJA_AUTH_OPENID_PROVIDERS_POCKETID_NAME",
