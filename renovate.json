@@ -43,6 +43,12 @@
     },
     {
       "customType": "regex",
+      "fileMatch": ["(^|/)values\\.yaml$"],
+      "matchStrings": ["image: \"(?<depName>[^:]+):(?<currentValue>[^\"]+)\""],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "fileMatch": ["(^|/)kustomization\\.ya?ml$"],
       "matchStrings": [
         "https://github.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>[^/]+)/"
