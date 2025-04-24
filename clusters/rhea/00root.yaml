@@ -40,7 +40,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root
+  name: 00root
   namespace: argocd
 spec:
   project: system
