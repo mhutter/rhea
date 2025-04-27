@@ -3,10 +3,7 @@ kind: Kustomization
 
 namespace: system-upgrade
 
-labels:
-  - includeSelectors: true
-    pairs:
-      app.kubernetes.io/name: system-upgrade-controller
+# NOTE: Don't add common labels here, otherwise the controller will have an ant-affinity rule preventing plan pods from running on the same nodes
 
 resources:
   - "https://github.com/rancher/system-upgrade-controller/releases/download/v0.15.2/crd.yaml"
