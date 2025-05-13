@@ -16,6 +16,6 @@ services:
     port: 8080
 
   emby:
-    image: "docker.io/emby/embyserver:4.9.0.53"
+    image: "docker.io/emby/embyserver:4.9.0.54"
     domain: emby.mhnet.app
     port: 8096
