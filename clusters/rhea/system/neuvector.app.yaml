@@ -17,7 +17,7 @@ spec:
         valuesObject: {}
     - repoURL: "https://neuvector.github.io/neuvector-helm"
       chart: core
-      targetRevision: "2.8.5"
+      targetRevision: "2.8.6"
       helm:
         valuesObject:
           runtimePath: /run/k3s/containerd/containerd.sock
