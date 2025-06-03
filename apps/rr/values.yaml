@@ -1,7 +1,7 @@
 ---
 services:
   radarr:
-    image: "ghcr.io/hotio/radarr:release-5.23.3.9987"
+    image: "ghcr.io/hotio/radarr:release-5.25.0.10024"
     domain: radarr.mhnet.app
     port: 7878
 
