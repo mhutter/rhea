@@ -3,15 +3,6 @@ kind: ConfigMap
 metadata:
   name: argocd-cm
 data:
-  # Prevent ArgoCD removing Cilium CRs
-  # see: https://docs.cilium.io/en/stable/configuration/argocd-issues/
-  resource.exclusions: |
-    - apiGroups:
-        - cilium.io
-      kinds:
-        - CiliumIdentity
-      clusters:
-        - "*"
   # Configure OIDC
   url: "https://argocd.mhnet.dev"
   dex.config: |
