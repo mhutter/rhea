@@ -175,7 +175,7 @@
                         },
                         "volumeMounts": [
                            {
-                              "mountPath": "/app/backend/data",
+                              "mountPath": "/app/data",
                               "name": "data"
                            }
                         ]
