@@ -7,15 +7,14 @@ local pocketid = mh.workload(
   image='ghcr.io/pocket-id/pocket-id:' + params.version,
   ports={
     http: {
-      number: 80,
+      number: 1411,
       host: params.host,
     },
   },
   env={
-    PUBLIC_APP_URL: 'https://' + params.host,
-    TRUST_PROXY: 'true',
+    APP_URL: 'https://' + params.host,
     DB_PROVIDER: 'postgres',
-    UPDATE_CHECK_DISABLED: 'true',
+    TRUST_PROXY: 'true',
   },
   envFromSecret=['pocketid-env'],
   volumes={
