@@ -18,7 +18,7 @@ local pocketid = mh.workload(
   },
   envFromSecret=['pocketid-env'],
   volumes={
-    data: '/app/backend/data',
+    data: '/app/data',
   },
   readinessPath='/health',
 );
