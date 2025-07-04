@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: ghcr.io/traefik/helm
     chart: traefik
-    targetRevision: 36.2.0
+    targetRevision: 36.3.0
     helm:
       valuesObject:
         deployment:
