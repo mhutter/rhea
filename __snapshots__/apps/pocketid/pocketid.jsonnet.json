@@ -139,7 +139,7 @@
                               }
                            }
                         ],
-                        "image": "ghcr.io/pocket-id/pocket-id:v1.6.2",
+                        "image": "ghcr.io/pocket-id/pocket-id:v1.6.4",
                         "livenessProbe": {
                            "tcpSocket": {
                               "port": 1411
