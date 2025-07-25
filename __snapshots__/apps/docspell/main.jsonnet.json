@@ -514,7 +514,7 @@
                         ],
                         "env": [ ],
                         "envFrom": [ ],
-                        "image": "docker.io/library/solr:9.8.1",
+                        "image": "docker.io/library/solr:9.9.0",
                         "livenessProbe": {
                            "tcpSocket": {
                               "port": 8983
@@ -564,7 +564,7 @@
                            "-c",
                            "mkdir -pv /var/solr/data; precreate-core docspell"
                         ],
-                        "image": "docker.io/library/solr:9.8.1",
+                        "image": "docker.io/library/solr:9.9.0",
                         "name": "precreate-core",
                         "securityContext": {
                            "allowPrivilegeEscalation": false,
