@@ -6,6 +6,6 @@ namespace: system-upgrade
 # NOTE: Don't add common labels here, otherwise the controller will have an ant-affinity rule preventing plan pods from running on the same nodes
 
 resources:
-  - "https://github.com/rancher/system-upgrade-controller/releases/download/v0.16.0/crd.yaml"
-  - "https://github.com/rancher/system-upgrade-controller/releases/download/v0.16.0/system-upgrade-controller.yaml"
+  - "https://github.com/rancher/system-upgrade-controller/releases/download/v0.16.2/crd.yaml"
+  - "https://github.com/rancher/system-upgrade-controller/releases/download/v0.16.2/system-upgrade-controller.yaml"
   - ./plan-k3s.yaml
