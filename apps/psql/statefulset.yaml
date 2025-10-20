@@ -33,7 +33,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: postgres
-          image: "docker.io/library/postgres:17.5-alpine"
+          image: "docker.io/library/postgres:18.0-alpine"
           args:
             - postgres
             - -c
